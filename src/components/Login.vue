@@ -57,7 +57,8 @@
         <el-form-item label="验证码" prop="authCode">
           <el-input type="text" v-model="regForm.authCode" autocomplete="off" placeholder="请输入验证码"
                     style="width: 365px"></el-input>
-          <el-button type="text" style="position: absolute;right: 1px;height: 40px" :disabled="send" @click="AuthCode">
+          <el-button :loading="loading" type="text" style="position: absolute;right: 1px;height: 40px"
+                     @click="AuthCode">
             {{ btn }}
           </el-button>
         </el-form-item>
@@ -83,7 +84,7 @@ export default {
     return {
       loginDia: false,
       registerDia: false,
-      send: false,
+      loading: false,
       btn: "发送",
       loginForm: {
         username: "",
@@ -140,31 +141,52 @@ export default {
   watch: {},
   methods: {
     login() {
-      let formData = new FormData();
-      formData.append("username", this.loginForm.username);
-      formData.append("password", this.loginForm.password)
-      this.$axios({
-        url: 'http://localhost:8001/login',
-        method: 'post',
-        data: formData
-      }).then(
-          res => {
-            console.log(res.data.data)
-          },
-          error => {
-            console.log(error.message)
-          }
-      )
+      this.$refs.loginForm.validate(v => {
+        if (v) {
+          let formData = new FormData();
+          formData.append("username", this.loginForm.username);
+          formData.append("password", this.loginForm.password)
+          this.$axios({
+            url: '/auth/login',
+            method: 'post',
+            headers: {"isToken":false},
+            data: formData
+          }).then(
+              res => {
+                console.log(res)
+                localStorage.setItem("token", res.data.data)
+                this.$router.push("/home")
+              },
+              error => {
+                console.log(error)
+                this.$message({
+                  message: error.response.data.msg,
+                  type: 'error'
+                });
+              }
+          )
+        } else {
+          this.$message({
+            message: '请输入用户名和密码',
+            type: 'error'
+          });
+        }
+      });
     },
     register() {
       this.$refs.ruleForm.validate(v => {
-        if (v){
-          this.$axios.post("http://localhost:8001/register", this.regForm).then(
+        if (v) {
+          this.$axios.post("/auth/register", this.regForm).then(
               res => {
                 this.$message({
                   message: res.data.msg,
                   type: 'success'
                 });
+                setTimeout(() => {
+                  this.registerDia = false;
+                  this.loginDia = true;
+                }, 2000)
+                this.loginForm.username = this.regForm.username;
                 console.log(res.data)
                 console.log(this.regForm)
               },
@@ -176,13 +198,13 @@ export default {
                 console.log(error.message)
               }
           )
-        }else {
+        } else {
           this.$message({
             message: '请检查填写的信息',
             type: 'error'
           });
         }
-      })
+      });
     },
     reg() {
       if (this.loginDia) {
@@ -194,41 +216,42 @@ export default {
         this.loginDia = !this.loginDia;
         setTimeout(() => {
           this.registerDia = !this.registerDia;
-        })
+        });
       }
     },
     AuthCode() {
       this.$refs.ruleForm.validateField("email", (e) => {
         if (e.length === 0) {
-          this.$axios.post("http://localhost:8001/register/" + this.regForm.email).then(
+          this.btn = "";
+          this.loading = true;
+          this.$axios.post("/auth/register/" + this.regForm.email).then(
               res => {
-                console.log(res.data)
+                this.loading = false;
+                if (res.data.code === 200) {
+                  this.$message({
+                    message: res.data.msg,
+                    type: 'success'
+                  })
+                } else {
+                  this.$message({
+                    message: res.data.msg,
+                    type: 'error'
+                  })
+                }
+                this.btn = "发送";
               },
               error => {
+                this.loading = false;
                 console.log(error.message)
               }
           );
-          this.send = true;
-          let a = 10;
-          const timer = setInterval(() => {
-            if (a === 1) {
-              setTimeout(() => {
-                this.send = false;
-                this.btn = "发送";
-                console.log(this.btn);
-                clearInterval(timer);
-              }, 1000);
-            }
-            this.btn = a.toString();
-            a = a - 1;
-          }, 1000);
         } else {
           this.$message({
             message: e,
             type: 'error'
           });
         }
-      })
+      });
     },
   },
   mounted() {

@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Welcome from "@/views/Welcome";
 import Home from "@/views/Home";
 import RichText from "@/components/RichText";
+import Login from "@/components/Login";
 
 
 Vue.use(VueRouter)
