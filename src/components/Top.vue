@@ -4,7 +4,6 @@
         v-model="value"
         active-color="#13ce66"
         inactive-color="#000000"
-        active-icon-class="el-icon-sunny"
         @change="changeModel(!value)"
         >
     </el-switch>
@@ -26,11 +25,6 @@ export default {
   },
   methods:{
     ...mapActions('displayModel',['changeModel'])
-    // change(){
-    //   console.log("change");
-    //   this.$bus.$emit("topic",this.value);
-    //   this.$store.dispatch("changeModel",this.value);
-    // }
   },
   mounted() {
       window.document.documentElement.setAttribute( "data-theme", 'light' );

@@ -1,8 +1,8 @@
 module.exports = {
     devServer: {
         overlay: {
-            warnings: false, //不显示警告
-            errors: true //不显示错误
+            warnings: false,
+            errors: true
         },
         port: 80,
     },

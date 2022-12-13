@@ -3,10 +3,15 @@ import VueRouter from 'vue-router'
 import Welcome from "@/views/Welcome";
 import Home from "@/views/Home";
 import RichText from "@/components/RichText";
-import Login from "@/components/Login";
+import Files from "@/views/Files";
+import WorkSpace from "@/views/WorkSpace";
 
 
 Vue.use(VueRouter)
+const routerPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return routerPush.call(this, location).catch(error => error)
+}
 
 const routes = [
   {
@@ -15,15 +20,25 @@ const routes = [
     component: Welcome
   },
   {
-    path: '/Home',
+    path: '/Note',
     name: 'Home',
     component: Home,
     children:[
       {
-        path: '/editor',
+        path: '/note/editor',
         name: 'richText',
         component: RichText,
       },
+      {
+        path: '/note/files',
+        name: 'Files',
+        component: Files
+      },
+      {
+        path: '/note/workspace',
+        name: 'WorkSpace',
+        component: WorkSpace
+      }
     ]
   },
 ]

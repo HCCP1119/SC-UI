@@ -29,6 +29,7 @@
 import {Editor, Toolbar} from '@wangeditor/editor-for-vue'
 import {Boot} from '@wangeditor/editor'
 import markdownModule from '@wangeditor/plugin-md'
+import {mapState} from "vuex";
 
 Boot.registerModule(markdownModule);
 
@@ -37,7 +38,9 @@ export default {
   components: {
     Editor, Toolbar,
   },
-
+  computed:{
+    ...mapState("editorNode",["note"])
+  },
   data() {
     return {
       editor: null,
@@ -66,9 +69,16 @@ export default {
 
   watch: {
     html(val) {
-      console.log(val);
+      //console.log(val);
       const json = this.editor.children;
-      console.log(json)
+     // console.log(json)
+    },
+    title(val){
+      console.log(val)
+      this.$store.dispatch("editorNode/setLabel",val);
+    },
+    note(val){
+      console.log(val)
     }
   },
 
@@ -79,8 +89,8 @@ export default {
 
   },
 
-  mounted() {
-
+  created() {
+    this.title=this.$route.params.data.label
   },
 
   beforeDestroy() {
@@ -94,6 +104,13 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@wangeditor/editor/dist/css/style.css";
+@import '../assets/scss/common/common.scss';
+
+html.dark {
+  --w-e-textarea-bg-color: #333;
+  --w-e-textarea-color: #fff;
+  /* ...其他... */
+}
 
 .editor {
   background-color: #FFF;
@@ -110,7 +127,6 @@ export default {
   border: 1px solid #f9fafb;
   font-size: 20px;
   font-weight: 500;
-  width: 200px;
+  width: 210px;
 }
-
 </style>
