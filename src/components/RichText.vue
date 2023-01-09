@@ -6,7 +6,7 @@
           v-model="title"
       >
       </el-input>
-      <el-button style="position: fixed;right: 110px" >保存</el-button>
+      <el-button style="position: fixed;right: 110px" @click="save">保存</el-button>
       <el-button style="position: fixed;right: 30px" type="primary">分享</el-button>
     </div>
     <Toolbar
@@ -44,6 +44,7 @@ export default {
   data() {
     return {
       editor: null,
+      noteId:'',
       title: '',
       html: '',
       toolbarConfig: {
@@ -56,11 +57,25 @@ export default {
       },
       editorConfig: {
         placeholder: '请输入内容...',
-        MENU_CONF: {
+        autoFocus:false,
+        MENU_CONF:{
           uploadImage:{
-            server:'/api/upload',
+            server: '/file/noteImage',
+            fieldName: 'img',
+            allowedimgTypes:['image/*'],
+            //自定义插入
+            customInsert(res,insertFn){
+              if (res.code === 200){
+                insertFn(res.data)
+              }else {
+                this.$message({
+                  message: '图片上传失败',
+                  type: 'error'
+                })
+              }
 
-          },
+            }
+          }
         }
       },
       mode: 'default', // or 'simple'
@@ -69,16 +84,20 @@ export default {
 
   watch: {
     html(val) {
-      //console.log(val);
-      const json = this.editor.children;
-     // console.log(json)
+     // console.log(val);
+     //  const json = this.editor.children;
+     //  console.log(json)
     },
     title(val){
       console.log(val)
       this.$store.dispatch("editorNode/setLabel",val);
     },
-    note(val){
-      console.log(val)
+    note:{
+      deep: true,
+      handler(val){
+        this.title = val.label
+      }
+      //console.log(val)
     }
   },
 
@@ -86,11 +105,29 @@ export default {
     onCreated(editor) {
       this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
     },
-
+    save(){
+      this.editor.getHtml()
+      console.log(this.editor.getHtml())
+      this.$axios({
+        url: `/note/saveNote`,
+        method: 'post',
+        data:{
+          "id": this.noteId,
+          "content": this.html,
+          "title": this.title,
+        }
+      })
+    }
   },
-
   created() {
-    this.title=this.$route.params.data.label
+    this.noteId = this.$route.params.id
+    this.$axios({
+      url:`/note/getNote/${this.noteId}`,
+      method: 'get'
+    }).then(res => {
+      this.title = res.data.data.title
+      this.html = res.data.data.content
+    })
   },
 
   beforeDestroy() {

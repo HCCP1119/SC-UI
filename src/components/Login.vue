@@ -153,9 +153,10 @@ export default {
             data: formData
           }).then(
               res => {
-                console.log(res)
-                localStorage.setItem("token", res.data.data)
-                this.$router.push("/home")
+               // console.log(res.headers)
+                localStorage.setItem("token", res.headers['authorization'])
+                localStorage.setItem("uid", res.data.data)
+                this.$router.push("/note/workspace/1")
               },
               error => {
                 console.log(error)

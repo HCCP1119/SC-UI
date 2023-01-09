@@ -25,7 +25,7 @@ const routes = [
     component: Home,
     children:[
       {
-        path: '/note/editor',
+        path: '/notes/:id',
         name: 'richText',
         component: RichText,
       },
@@ -35,9 +35,10 @@ const routes = [
         component: Files
       },
       {
-        path: '/note/workspace',
+        path: '/note/workspace/:id',
         name: 'WorkSpace',
-        component: WorkSpace
+        component: WorkSpace,
+
       }
     ]
   },

@@ -4,29 +4,38 @@
         v-model="value"
         active-color="#13ce66"
         inactive-color="#000000"
-        @change="changeModel(!value)"
+        @change="changeVal"
         >
     </el-switch>
   </div>
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import {mapActions,mapState} from 'vuex'
 
 export default {
   name: "Top",
   data(){
     return{
-      value:true
+      value:null
+    }
+  },
+  watch:{
+    colorSwitch(){
+      this.value=this.colorSwitch
     }
   },
   computed:{
-
+    ...mapState("displayModel", ['colorSwitch']),
   },
   methods:{
-    ...mapActions('displayModel',['changeModel'])
+    ...mapActions('displayModel',['changeModel']),
+    changeVal(){
+      this.$store.dispatch("displayModel/changeModel",!this.value)
+    }
   },
   mounted() {
+      this.value = this.colorSwitch
       window.document.documentElement.setAttribute( "data-theme", 'light' );
   }
 }

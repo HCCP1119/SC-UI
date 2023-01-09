@@ -10,6 +10,7 @@ const store = new Vuex.Store({
             namespaced: true,
             state: {
                 isDark: false,
+                colorSwitch: true,
             },
             actions: {
                 changeModel(context, value) {
@@ -19,6 +20,7 @@ const store = new Vuex.Store({
             mutations: {
                 change(state, value) {
                     state.isDark = value;
+                    state.colorSwitch = !value;
                 }
             }
         },
@@ -49,7 +51,7 @@ const store = new Vuex.Store({
                     state.note.label = value;
                 }
             }
-        }
+        },
     }
 })
 

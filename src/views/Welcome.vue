@@ -39,7 +39,7 @@ export default {
   },
   methods:{
     start(){
-      this.$router.push("/note")
+      this.$router.push("/note/workspace/1")
     },
     login(){
       this.$bus.$emit("logDig",!this.dialogVisible);

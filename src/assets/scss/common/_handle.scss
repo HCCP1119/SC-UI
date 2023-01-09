@@ -30,3 +30,9 @@
     color: themed($color)!important;
   }
 }
+//获取svg颜色
+@mixin svg_color($color){
+  @include themeify{
+    stroke: themed($color)!important;
+  }
+}
