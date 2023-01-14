@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import {
     Button, Container, Header,
-    Main, Aside, Switch,Footer,
+    Main, Aside, Switch, Footer,
     Row, Col, Menu, Submenu,
     MenuItemGroup, MenuItem,
     Form, FormItem, Input,
@@ -12,14 +12,15 @@ import {
     DropdownItem, DropdownMenu,
     CollapseItem, Collapse, Tree,
     Select, Option, Message,
-    MessageBox,Tabs,Pagination,
-    Loading,Table,TableColumn,
-    Divider,Upload,RadioGroup,
-    RadioButton,
+    MessageBox, Tabs, Pagination,
+    Loading, Table, TableColumn,
+    Divider, Upload, RadioGroup,
+    RadioButton, DatePicker,
 } from "element-ui";
 import store from './store'
 // import axios from "axios";
 import request from "../src/assets/js/axiosConfig"
+import _ from 'lodash'
 
 Vue.config.productionTip = false
 Vue.use(Button)
@@ -59,11 +60,12 @@ Vue.use(Divider)
 Vue.use(Upload)
 Vue.use(RadioGroup)
 Vue.use(RadioButton)
+Vue.use(DatePicker)
 Vue.use(Loading)
 Vue.prototype.$axios = request
 Vue.prototype.$message = Message
 Vue.prototype.$msgbox = MessageBox
-
+Vue.prototype._ = _
 new Vue({
     router,
     store,

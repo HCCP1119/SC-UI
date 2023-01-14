@@ -5,6 +5,7 @@ import Home from "@/views/Home";
 import RichText from "@/components/RichText";
 import Files from "@/views/Files";
 import WorkSpace from "@/views/WorkSpace";
+import StarFile from "@/views/StarFile";
 
 
 Vue.use(VueRouter)
@@ -38,7 +39,11 @@ const routes = [
         path: '/note/workspace/:id',
         name: 'WorkSpace',
         component: WorkSpace,
-
+      },
+      {
+        path: '/note/starFile',
+        name: 'StarFile',
+        component: StarFile,
       }
     ]
   },

@@ -1,6 +1,15 @@
 <template>
   <div>
     <el-container>
+      <div style="position: fixed;top: 5px;right: 70px">
+        <el-button
+            size="small"
+            type="primary"
+            @click="dialogVisible = true;">
+          <i class="el-icon-search"></i>
+          搜索笔记
+        </el-button>
+      </div>
       <h2 style="padding-left: 20px;margin-bottom: 3px">工作区</h2>
       <el-header>
         <el-tabs v-model="editableTabsValue" @tab-remove="removeTab" @tab-click="handleClick">
@@ -16,78 +25,132 @@
       </el-header>
       <el-main>
         <div style="margin-top: -20px">
-          <el-row v-for="col in rolList" :key="col.id">
-            <div @click="detail(col)">
-              <el-col :span="1">
-                <div>
-                  <el-image :src="require('@/assets/images/' + col.icon + '.png')" style="width: 20px;height: 20px"></el-image>
-                </div>
-              </el-col>
-              <el-col :span="5">
-                <div>{{ col.label }}</div>
-              </el-col>
-              <el-col :span="5">
-                <div>创建时间：{{ col.createTime }}</div>
-              </el-col>
-              <el-col :span="13">
-                <div>
-                  <el-dropdown trigger="hover" placement="bottom" style="margin-left: 90%">
+          <div class="main-data">
+            <el-row v-for="col in rolList" :key="col.id">
+              <div @click="detail(col)">
+                <el-col :span="1">
+                  <div>
+                    <el-image :src="require('@/assets/images/' + col.icon + '.png')" style="width: 20px;height: 20px"></el-image>
+                  </div>
+                </el-col>
+                <el-col :span="5">
+                  <div>{{ col.label }}</div>
+                </el-col>
+                <el-col :span="6">
+                  <div>创建时间：{{ col.createTime }}</div>
+                </el-col>
+                <el-col :span="12">
+                  <div>
+                    <el-dropdown trigger="hover" placement="bottom" style="margin-left: 90%">
                   <span class="el-dropdown-link">
                    <i class="el-icon-more"></i>
                   </span>
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item>
-                      </el-dropdown-item>
-                      <el-dropdown-item>
-                        <i class="el-icon-search"></i>
-                        <el-button
-                            style="padding-right: 0;padding-left: 0;color: #2c2e33"
-                            type="text"
-                            size="mini"
-                            @click="dialogVisible=true">
-                          <span style="font-size: 14px">查看</span>
-                        </el-button>
-                      </el-dropdown-item>
-                      <el-dropdown-item>
-                        <i class="el-icon-delete"></i>
-                        <el-button
-                            style="padding-right: 0;padding-left: 0;color: #F56C6C"
-                            type="text"
-                            size="mini"
-                            @click="() => remove(node, data)">
-                          <span style="font-size: 14px">删除</span>
-                        </el-button>
-                      </el-dropdown-item>
-                    </el-dropdown-menu>
-                  </el-dropdown>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item>
+                        </el-dropdown-item>
+                        <el-dropdown-item>
+
+                        </el-dropdown-item>
+                        <el-dropdown-item>
+                          <i class="el-icon-delete"></i>
+                          <el-button
+                              style="padding-right: 0;padding-left: 0;color: #F56C6C"
+                              type="text"
+                              size="mini"
+                              @click="() => remove(col.id)">
+                            <span style="font-size: 14px">删除</span>
+                          </el-button>
+                        </el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
+                  </div>
+                </el-col>
+              </div>
+            </el-row>
+            <el-dialog
+                :visible.sync="dialogVisible"
+                :before-close="dialogClose"
+                :close-on-click-modal="false"
+                width="40%"
+            >
+              <div slot="title" class="header">
+                <i class="el-icon-search" style="padding: 0 10px"></i>
+                <el-input v-model="query"></el-input>
+                <el-divider></el-divider>
+              </div>
+              <div class="body">
+                <div class="col-1">
+                  <el-select v-model="searchType" disabled placeholder="请选择" size="medium" style="margin-top: 5px;">
+                  </el-select>
+
+                  <el-select v-model="sortType" placeholder="请选择" size="medium" style="margin-top: 5px;margin-left: 10px">
+                    <el-option
+                        v-for="item in sortBasis"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                    </el-option>
+                  </el-select>
+                  <el-button @click="search" style="margin-left: 8px" type="primary" size="medium" icon="el-icon-s-operation">过滤器</el-button>
                 </div>
-              </el-col>
-            </div>
-          </el-row>
-          <el-dialog
-              :visible.sync="dialogVisible"
-              :close-on-click-modal="false"
-              width="40%"
-          >
-            <template slot="title">
-              <i class="el-icon-search" style="padding: 0 10px"></i>
-              <el-input v-model="query"></el-input>
-              <el-divider></el-divider>
-            </template>
-            <span>这是一段信息</span>
-            <span slot="footer" class="dialog-footer">
-            </span>
-          </el-dialog>
+
+                <div class="col-2" style="margin-top: 15px">
+                  <label>创建时间（起始）</label>
+                  <label style="margin-left: 16%">创建时间（结束）</label>
+                </div>
+
+                <div class="col-3" style="margin-top: 15px">
+                  <el-date-picker
+                      v-model="createTime"
+                      type="daterange"
+                      value-format="yyyy-MM-dd"
+                      unlink-panels
+                      :editable="false"
+                      range-separator="至"
+                      start-placeholder="选择一个时间"
+                      end-placeholder="选择一个时间"
+                  >
+                  </el-date-picker>
+                </div>
+                <div class="col-4" style="margin-top: 15px">
+                  <label>最后修改时间（起始）</label>
+                  <label style="margin-left: 11%">最后修改时间（结束）</label>
+                </div>
+                <div class="col-5" style="margin-top: 15px">
+                  <el-date-picker
+                      v-model="updateTime"
+                      type="daterange"
+                      value-format="yyyy-MM-dd"
+                      unlink-panels
+                      :editable="false"
+                      range-separator="至"
+                      start-placeholder="选择一个时间"
+                      end-placeholder="选择一个时间"
+                  >
+                  </el-date-picker>
+                </div>
+              </div>
+              <div slot="footer" class="footer">
+                <el-row :gutter="20" v-for="note in searchResult" :key="note.id">
+                  <div @click="pushNote(note.id)">
+                    <el-col :span="2">
+                      <div>
+                        <el-image :src="require('@/assets/images/color_notepad.png')" style="width: 20px;height: 20px"></el-image>
+                      </div>
+                    </el-col>
+                    <el-col :span="6">
+                      <div style="text-align: left">{{ note.title }}</div>
+                    </el-col>
+                    <el-col :span="14">
+                      <div>上一次修改：{{ note.updateTime }}</div>
+                    </el-col>
+                  </div>
+                </el-row>
+              </div>
+            </el-dialog>
+          </div>
         </div>
       </el-main>
-      <el-footer style="margin-top: 10px;margin-left: 30%">
-        <el-pagination
-            background
-            layout="prev, pager, next"
-            :page-size="10"
-            :total="70">
-        </el-pagination>
-      </el-footer>
     </el-container>
   </div>
 </template>
@@ -98,11 +161,23 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      query: '',
+      query: null,
       workspaces: [],
       rolList: [],
       editableTabsValue: '1',
       editableTabs: [],
+      searchType:'笔记名称',
+      sortBasis:[{
+        value: 'ASC',
+        label: '升序'
+      },{
+        value: 'DESC',
+        label: '降序'
+      }],
+      sortType:'ASC',
+      createTime:[],
+      updateTime:[],
+      searchResult:[],
     }
   },
   watch: {
@@ -115,7 +190,6 @@ export default {
           url: `/note/getTree/${id}`,
           method: 'get',
         }).then(res => {
-          console.log(res.data)
           if (res.data.data.tab!==null){
             this.detail(res.data.data.tab)
           }
@@ -123,7 +197,7 @@ export default {
         })
       }
       this.editableTabsValue = id
-    }
+    },
   },
   methods: {
     detail(workspace) {
@@ -152,6 +226,20 @@ export default {
         })
       }
     },
+    remove(id){
+      this.$axios({
+        url:`/note/remove/${id}`,
+        method:"delete"
+      }).then(() => {
+        this.getData()
+        this.$bus.$emit("refreshAside")
+      })
+    },
+    pushNote(id){
+      this.$router.push({
+        path: `/notes/${id}`,
+      })
+    },
     removeTab(targetName) {
       let tabs = this.editableTabs;
       let activeName = this.editableTabsValue;
@@ -174,16 +262,9 @@ export default {
         })
         this.rolList = this.workspaces;
       } else {
-        // this.$router.push({
-        //   path: `/note/workspace/${activeName}`,
-        // }).then(()=>{
-        //   this.$axios({
-        //     url: `/note/getTree/${activeName}`,
-        //     method: 'get',
-        //   }).then(res => {
-        //     this.rolList = res.data.data
-        //   })
-        // })
+        this.$router.push({
+          path: `/note/workspace/${activeName}`,
+        })
       }
     },
     handleClick(tab) {
@@ -204,15 +285,59 @@ export default {
           // })
         })
       }
-    }
+    },
+    search(){
+      const createStart = ((this.createTime.length))===0 ? null : ((this.createTime)[0])
+      const createEnd = ((this.createTime.length))===0 ? null : ((this.createTime)[1])
+      const updateStart = ((this.updateTime.length))===0 ? null : ((this.updateTime)[0])
+      const updateEnd = ((this.updateTime.length))===0 ? null : ((this.updateTime)[1])
+      this.$axios({
+        url: '/note/search',
+        method: 'post',
+        data:{
+          "value": this.query,
+          "searchType": this.searchType,
+          "sortType": this.sortType,
+          "createStart": createStart,
+          "createEnd": createEnd,
+          "updateStart": updateStart,
+          "updateEnd": updateEnd,
+          "userId":localStorage.getItem("uid")
+        }
+      }).then(res => {
+        console.log(res)
+        this.searchResult = res.data.data
+      })
+    },
+    dialogClose(){
+      this.dialogVisible = false
+      this.query = null
+      this.createTime.splice(0)
+      this.updateTime.splice(0)
+      this.searchResult.splice(0);
+    },
+
+    getData(){
+      const uid = Number(localStorage.getItem("uid"))
+      this.$axios({
+        url: `/note/getTree`,
+        method: 'get',
+        params:{
+          "uid": uid
+        }
+      }).then(res => {
+        this.workspaces = res.data.data
+        this.rolList = this.workspaces
+      })
+    },
+
   },
   created() {
-    this.$axios({
-      url: `/note/getTree`,
-      method: 'get',
-    }).then(res => {
-      this.workspaces = res.data.data
-      this.rolList = this.workspaces
+    this.getData()
+  },
+  mounted() {
+    this.$bus.$on("refresh",()=>{
+      this.getData()
     })
   }
 }
@@ -221,23 +346,24 @@ export default {
 <style scoped lang="scss">
 @import "../assets/scss/common/common";
 
-.el-row:hover {
-  outline: 0 !important;
-  @include font_color("aside_text-color");
-  border-radius: 0.8em;
-  @include background_color("hover_background_color");
+.main-data{
+  max-height: 500px;
+  overflow-y: auto;
+  .el-row:hover {
+    outline: 0 !important;
+    @include font_color("aside_text-color");
+    border-radius: 0.8em;
+    @include background_color("hover_background_color");
+  }
+  .el-row {
+    height: 50px;
+    width: 100%;
+  }
+  .el-col {
+    padding-top: 15px;
+    padding-left: 15px;
+  }
 }
-
-.el-row {
-  height: 50px;
-  width: 100%;
-}
-
-.el-col {
-  padding-top: 15px;
-  padding-left: 15px;
-}
-
 .el-icon-delete {
   color: #F56C6C;
 }
@@ -250,9 +376,34 @@ export default {
   width: 50%;
 }
 
-::v-deep .el-input__inner {
-  border: 1px solid #f9fafb;
-  padding: 0;
+.header{
+  ::v-deep .el-input__inner {
+    border: 1px solid #f9fafb;
+    padding: 0;
+  }
+  ::v-deep .el-divider{
+    margin: 0;
+  }
+}
+
+.body{
+  ::v-deep .el-input__inner,::v-deep .el-range-input{
+    background-color: #e7ebed;
+  }
+}
+
+.footer{
+  width: 614.4px;
+  .el-row {
+    margin: 0 0 5px!important;
+    height: 50px;
+    width: 100%;
+    background-color: #e7ebed!important;
+  }
+  .el-col {
+    padding-top: 15px;
+    padding-left: 15px;
+  }
 }
 
 ::v-deep .el-dialog__body {
@@ -261,6 +412,11 @@ export default {
 
 ::v-deep .el-dialog__header {
   padding: 10px 10px 5px !important;
+}
+::v-deep .el-dialog__footer{
+  padding: 10px 0 5px!important;
+  overflow-y: auto;
+  max-height: 180px;
 }
 .el-tabs{
   ::v-deep .el-tabs__item{

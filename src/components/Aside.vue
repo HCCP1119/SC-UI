@@ -105,8 +105,10 @@
               </el-image>
               <el-upload
                   class="upload"
-                  action="http://localhost:8004/file/headImage"
+                  action="http://localhost:9200/file/headImage"
                   name="img"
+                  :headers="headerObj"
+                  accept=".jpg,.jpeg,.png"
                   :on-success="uploadSuccess"
                   :data="{'uid':this.user.id}"
                   :show-file-list="false">
@@ -162,7 +164,7 @@
                 <span slot="title">主页</span>
               </template>
             </el-menu-item>
-            <el-menu-item index="/note">
+            <el-menu-item index="/note/starFile">
               <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star" width="20" height="20"
                    viewBox="0 0 24 24" stroke-width="1.5" stroke="#00abfb" fill="none" stroke-linecap="round"
                    stroke-linejoin="round">
@@ -321,6 +323,7 @@ export default {
       dfa: "/note/workspace",
       activeNames: ['1'],
       src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
+      headerObj:{'Authorization':localStorage.getItem('token')},
       fits: 'fill',
       filterText: '',
       workspaceLabel: '',
@@ -351,21 +354,14 @@ export default {
   },
   computed: {
     ...mapState("displayModel", ['isDark']),
-    ...mapState("editorNode", ['note'])
   },
   watch: {
     filterText(val) {
       this.$refs.tree.filter(val);
     },
-    $route() {
-      this.menuItemClick()
+    $route(to) {
+      this.menuItemClick(to)
     },
-    note: {
-      deep: true,
-      handler(val){
-        console.log(val.label)
-      }
-    }
   },
   methods: {
     ...mapActions('displayModel',['changeModel']),
@@ -392,7 +388,7 @@ export default {
         newChild = {label: '无标题笔记', children: null, id: null, isEdit: true, type: 'note', icon: 'color_notepad'};
         this.$store.dispatch("editorNode/setNode", newChild)
       } else {
-        newChild = {label: '新建文件夹', children: [], id: null, isEdit: true, type: 'path', icon: 'notebook'};
+        newChild = {label: '新建文件夹', children: [], id: null, isEdit: true, type: 'folder', icon: 'notebook'};
       }
       if (!data.children) {
         this.$set(data, 'children', []);
@@ -417,14 +413,12 @@ export default {
       this.deleteNode.nodeIndex = index;
       this.deleteNode.nodeData = node.data;
       children.splice(index, 1);
-      // this.$axios({
-      //   url: "http://localhost:8005/node",
-      //   method: 'post',
-      //   data: {
-      //     "parent": this.deleteNode.parent,
-      //     "nodeData": this.deleteNode.nodeData
-      //   }
-      // })
+      this.$axios({
+        url: `/note/remove/${data.id}`,
+        method: 'delete',
+      }).then(()=>{
+        this.$bus.$emit("refresh")
+      })
     },
 
     restore() {
@@ -496,7 +490,7 @@ export default {
         node.data.isEdit = false;
         let src = '';
         let data = {};
-        if (node.data.type === 'note') {
+        if (node.data.type === 'note' && !node.data.rename) {
           src = '/note/addNote'
           data={
             "id": null,
@@ -508,34 +502,7 @@ export default {
             "parentId": node.parent.data.id,
             "uid": localStorage.getItem("uid")
           }
-          this.$store.dispatch("editorNode/setLabel", this.workspaceLabel);
-          this.$router.push({
-            path: '/note/editor',
-            params: {data: node.data}
-          })
-        } else if (node.data.type === 'path' && !node.data.rename) {
-          src = '/note/addFolder'
-          data={
-            "id": null,
-            "create_time": null,
-            "label": node.data.label,
-            "type": node.data.type,
-            "icon": node.data.icon,
-            "isEdit": node.data.isEdit,
-            "parentId": node.parent.data.id,
-          }
-        } else if (node.data.rename){
-          if (node.data.type==='workspace'){
-            src = '/note/rename/workspace'
-          }
-          else if (node.data.type==='path'){
-            src = '/note/rename/folder'
-          }
-          data={
-            "id": node.data.id,
-            "label": node.data.label,
-          }
-        } else {
+        } else if (!node.data.rename) {
           src = '/note/addWorkspace'
           data={
             "id": null,
@@ -547,14 +514,23 @@ export default {
             "parentId": node.parent.data.id,
             "uid": localStorage.getItem("uid")
           }
+        } else if (node.data.rename){
+          src = "/note/rename"
+          data={
+            "id": node.data.id,
+            "label": node.data.label,
+          }
         }
         this.$axios({
           url: src,
           method: 'post',
           data: data
         }).then(res => {
-          this.workspace = res.data.data
           node.data.rename = false
+          this.$bus.$emit("refresh")
+          if (node.data.type==='note'){
+            this.$bus.$emit("resetTitle",node.data.label)
+          }
         })
       }
     },
@@ -583,7 +559,7 @@ export default {
           message: '修改成功',
           type: 'success'
         })
-      },error => {
+      },() => {
         this.$message({
           message: '修改失败',
           type: 'error'
@@ -600,7 +576,10 @@ export default {
     this.$axios.all([
         this.$axios({
           url: `/note/getTree`,
-          method: 'get'
+          method: 'get',
+          params:{
+            "uid": Number(localStorage.getItem("uid"))
+          }
         }),
         this.$axios({
           url: `/auth/getUser`,
@@ -618,7 +597,17 @@ export default {
     }))
   },
   mounted() {
-
+    this.$bus.$on("refreshAside",()=>{
+      this.$axios({
+        url: `/note/getTree`,
+        method: 'get',
+        params:{
+          "uid": Number(localStorage.getItem("uid"))
+        }
+      }).then(res=>{
+        this.workspace = res.data.data
+      })
+    })
   }
 }
 </script>

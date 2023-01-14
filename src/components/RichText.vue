@@ -4,6 +4,7 @@
       <el-input
           placeholder="请输入标题"
           v-model="title"
+          @blur="saveTitle"
       >
       </el-input>
       <el-button style="position: fixed;right: 110px" @click="save">保存</el-button>
@@ -29,7 +30,8 @@
 import {Editor, Toolbar} from '@wangeditor/editor-for-vue'
 import {Boot} from '@wangeditor/editor'
 import markdownModule from '@wangeditor/plugin-md'
-import {mapState} from "vuex";
+import axios from "axios";
+
 
 Boot.registerModule(markdownModule);
 
@@ -38,13 +40,10 @@ export default {
   components: {
     Editor, Toolbar,
   },
-  computed:{
-    ...mapState("editorNode",["note"])
-  },
   data() {
     return {
       editor: null,
-      noteId:'',
+      noteId: '',
       title: '',
       html: '',
       toolbarConfig: {
@@ -57,47 +56,56 @@ export default {
       },
       editorConfig: {
         placeholder: '请输入内容...',
-        autoFocus:false,
-        MENU_CONF:{
-          uploadImage:{
-            server: '/file/noteImage',
+        autoFocus: false,
+        MENU_CONF: {
+          uploadImage: {
+            server: 'http://localhost:9200/file/noteImage',
+            headers: {
+              'Authorization': localStorage.getItem("token")
+            },
             fieldName: 'img',
-            allowedimgTypes:['image/*'],
+            maxImgSize: 5 * 1024 * 1024,
+            allowedFileTypes: ['image/*'],
             //自定义插入
-            customInsert(res,insertFn){
-              if (res.code === 200){
+            customInsert(res, insertFn) {
+              if (res.code === 200) {
                 insertFn(res.data)
-              }else {
+              } else {
                 this.$message({
                   message: '图片上传失败',
                   type: 'error'
                 })
               }
-
             }
           }
-        }
+        },
       },
-      mode: 'default', // or 'simple'
+      mode: 'default', // or 'simple',
+      removeImgList: [],
     }
   },
 
   watch: {
-    html(val) {
-     // console.log(val);
-     //  const json = this.editor.children;
-     //  console.log(json)
+    $route(to) {
+      const id = (to.path).substring((to.path).lastIndexOf("/") + 1)
+      this.$axios({
+        url: `/note/getNote/${id}`,
+        method: 'get'
+      }).then(res => {
+        this.title = res.data.data.title
+        this.html = res.data.data.content
+        this.noteId = res.data.data.id
+      })
     },
-    title(val){
-      console.log(val)
-      this.$store.dispatch("editorNode/setLabel",val);
-    },
-    note:{
-      deep: true,
-      handler(val){
-        this.title = val.label
+    html(newVal, oldVal) {
+      const reg = /(?<=img src=").*?(?=" alt=)/g
+      if (oldVal.length > newVal.length) {
+        const oldImgList = oldVal.match(reg)===null?[]:oldVal.match(reg)
+        const newImgList = newVal.match(reg)===null?[]:newVal.match(reg)
+        if (this._.difference(oldImgList, newImgList)[0]!==undefined){
+          this.removeImgList.push(this._.difference(oldImgList, newImgList)[0])
+        }
       }
-      //console.log(val)
     }
   },
 
@@ -105,37 +113,69 @@ export default {
     onCreated(editor) {
       this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
     },
-    save(){
-      this.editor.getHtml()
-      console.log(this.editor.getHtml())
+    saveTitle(){
       this.$axios({
-        url: `/note/saveNote`,
-        method: 'post',
-        data:{
-          "id": this.noteId,
-          "content": this.html,
-          "title": this.title,
-        }
+        url: `/note/saveTitle/${this.noteId}/${this.title}`,
+        method: 'post'
+      }).then(() =>{
+        this.$bus.$emit("refreshAside")
       })
+    },
+    save() {
+      console.log(this.removeImgList)
+      this.$axios.all([
+        this.$axios({
+          url: `/note/saveNote`,
+          method: 'post',
+          data: {
+            "id": this.noteId,
+            "content": this.html,
+            "title": this.title,
+            "uid": localStorage.getItem("uid")
+          }
+        }),
+        this.$axios({
+          url: `http://localhost:8004/file/removeNoteImg`,
+          method: 'delete',
+          data: {
+            "removeImgList": this.removeImgList
+          }
+        })
+      ]).then(axios.spread((data1, data2) => {
+        this.removeImgList=[]
+        this.$message({
+          message: data1.data.msg,
+          type: 'success'
+        })
+      }))
+
     }
   },
   created() {
-    this.noteId = this.$route.params.id
+    const id = this.$route.path.substring((this.$route.path).lastIndexOf("/") + 1)
+    this.noteId = id
     this.$axios({
-      url:`/note/getNote/${this.noteId}`,
+      url: `/note/getNote/${id}`,
       method: 'get'
     }).then(res => {
       this.title = res.data.data.title
       this.html = res.data.data.content
     })
   },
-
+  mounted() {
+    this.$bus.$on("resetTitle",(title)=>{
+      this.title = title
+    })
+  },
   beforeDestroy() {
     const editor = this.editor
     if (editor == null) return
     editor.destroy() // 组件销毁时，及时销毁编辑器
+  },
+  beforeRouteUpdate(to,from,next){
+    this.save()
+    next()
   }
-
 }
 </script>
 
@@ -146,7 +186,12 @@ export default {
 html.dark {
   --w-e-textarea-bg-color: #333;
   --w-e-textarea-color: #fff;
-  /* ...其他... */
+}
+
+::v-deep .w-e-text-container {
+  h1 {
+    font-size: 2em !important;
+  }
 }
 
 .editor {

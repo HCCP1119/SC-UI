@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import {checkNull, checkPass} from "@/assets/js/check"
+import {checkNull, checkPass} from "@/assets/js/formCheck"
 
 export default {
   name: "Login",
