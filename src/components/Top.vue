@@ -5,47 +5,51 @@
         active-color="#13ce66"
         inactive-color="#000000"
         @change="changeVal"
-        >
+    >
     </el-switch>
   </div>
 </template>
 
 <script>
-import {mapActions,mapState} from 'vuex'
+import {mapState} from 'vuex'
 
 export default {
   name: "Top",
-  data(){
-    return{
-      value:null
+  data() {
+    return {
+      value: null
     }
   },
-  watch:{
-    colorSwitch(){
-      this.value=this.colorSwitch
+  watch: {
+    colorSwitch() {
+      this.value = this.colorSwitch
+      const theme = this.value ? 'light' : 'dark'
+      localStorage.setItem("isLight", this.value)
+      localStorage.setItem("theme", theme)
     }
   },
-  computed:{
+  computed: {
     ...mapState("displayModel", ['colorSwitch']),
   },
-  methods:{
-    ...mapActions('displayModel',['changeModel']),
-    changeVal(){
-      this.$store.dispatch("displayModel/changeModel",!this.value)
+  methods: {
+    changeVal() {
+      this.$store.dispatch("displayModel/changeModel", !this.value)
     }
   },
   mounted() {
-      this.value = this.colorSwitch
-      window.document.documentElement.setAttribute( "data-theme", 'light' );
+    this.value = this.colorSwitch
+    // const theme = (localStorage.getItem("isLight")) ? 'dark' : 'light'
+    // window.document.documentElement.setAttribute("data-theme", theme);
   }
 }
 </script>
 
 <style scoped lang="scss">
-#Top{
+#Top {
   width: 100%;
 }
-.el-switch{
+
+.el-switch {
   position: fixed;
   top: 10px;
   right: 20px;
