@@ -156,7 +156,7 @@ export default {
                // console.log(res.headers)
                 localStorage.setItem("token", res.headers['authorization'])
                 localStorage.setItem("uid", res.data.data)
-                this.$router.push("/note/workspace/1")
+                this.$router.push("/note/workspace/list")
               },
               error => {
                 console.log(error)

@@ -231,7 +231,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../assets/scss/common/common";
+@import "src/assets/scss/common/common";
 
 .imageLayer {
   width: 200px;

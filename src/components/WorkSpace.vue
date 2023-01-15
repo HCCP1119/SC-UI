@@ -13,7 +13,7 @@
       <h2 style="padding-left: 20px;margin-bottom: 3px">工作区</h2>
       <el-header>
         <el-tabs v-model="editableTabsValue" @tab-remove="removeTab" @tab-click="handleClick">
-          <el-tab-pane label="工作区列表" name="1"></el-tab-pane>
+          <el-tab-pane label="工作区列表" name="list"></el-tab-pane>
           <el-tab-pane
               v-for="item in editableTabs"
               :key="item.name"
@@ -29,19 +29,20 @@
             <el-row v-for="col in rolList" :key="col.id">
               <div @click="detail(col)">
                 <el-col :span="1">
-                  <div>
-                    <el-image :src="require('@/assets/images/' + col.icon + '.png')" style="width: 20px;height: 20px"></el-image>
+                  <div style="width: 40px;height: 40px;background-color: #e7f5ff;border-radius: 5px">
+                    <el-image :src="require('@/assets/images/' + col.icon + '.png')" style="width: 20px;height: 20px;padding-left: 10px;padding-top: 10px;"></el-image>
                   </div>
                 </el-col>
-                <el-col :span="5">
-                  <div>{{ col.label }}</div>
-                </el-col>
-                <el-col :span="6">
-                  <div>创建时间：{{ col.createTime }}</div>
-                </el-col>
-                <el-col :span="12">
+                <el-col :span="20" style="margin-top: -3px">
+                  <div style="font-size: 20px">{{ col.label }}</div>
                   <div>
-                    <el-dropdown trigger="hover" placement="bottom" style="margin-left: 90%">
+                    <span style="font-size: 10px;padding-right: 15px">创建时间：{{ col.createTime }}</span>
+                    <span style="font-size: 10px" v-if="col.updateTime!==null">修改时间：{{ col.updateTime }}</span>
+                  </div>
+                </el-col>
+                <el-col :span="2">
+                  <div>
+                    <el-dropdown trigger="hover" placement="bottom" style="margin-left: 90%;padding-top: 10px">
                   <span class="el-dropdown-link">
                    <i class="el-icon-more"></i>
                   </span>
@@ -164,7 +165,7 @@ export default {
       query: null,
       workspaces: [],
       rolList: [],
-      editableTabsValue: '1',
+      editableTabsValue: 'list',
       editableTabs: [],
       searchType:'笔记名称',
       sortBasis:[{
@@ -183,7 +184,7 @@ export default {
   watch: {
     $route(to) {
       const id = (to.path).substring((to.path).lastIndexOf("/") + 1)
-      if (id === "1") {
+      if (id === "list") {
         this.rolList = this.workspaces
       } else {
         this.$axios({
@@ -256,7 +257,7 @@ export default {
       this.editableTabsValue = activeName;
       this.editableTabs = tabs.filter(tab => tab.name !== targetName);
       if (this.editableTabs.length === 0) {
-        this.editableTabsValue = "1";
+        this.editableTabsValue = "list";
         this.$router.push({
           path: `/note/workspace/${this.editableTabsValue}`,
         })
@@ -268,7 +269,7 @@ export default {
       }
     },
     handleClick(tab) {
-      if (tab.name === '1') {
+      if (tab.name === 'list') {
         this.rolList = this.workspaces
         this.$router.push({
           path: `/note/workspace/${tab.name}`,
@@ -336,7 +337,7 @@ export default {
     this.getData()
   },
   mounted() {
-    this.$bus.$on("refresh",()=>{
+    this.$bus.$on("WorkspaceRefresh",()=>{
       this.getData()
     })
   }
@@ -344,7 +345,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../assets/scss/common/common";
+@import "src/assets/scss/common/common";
 
 .main-data{
   max-height: 500px;
@@ -356,7 +357,7 @@ export default {
     @include background_color("hover_background_color");
   }
   .el-row {
-    height: 50px;
+    height: 70px;
     width: 100%;
   }
   .el-col {
@@ -364,6 +365,7 @@ export default {
     padding-left: 15px;
   }
 }
+
 .el-icon-delete {
   color: #F56C6C;
 }
@@ -429,5 +431,15 @@ export default {
 }
 .el-icon-more{
   padding: 5px;
+}
+
+.el-dropdown-menu {
+  @include background_color("aside_color");
+  @include font_color("aside_text-color");
+}
+
+.el-dropdown-menu__item:hover {
+  @include font_color("aside_text-color");
+  @include background_color("hover_background_color");
 }
 </style>

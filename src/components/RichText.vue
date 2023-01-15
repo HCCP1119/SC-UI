@@ -7,17 +7,19 @@
           @blur="saveTitle"
       >
       </el-input>
-      <el-button style="position: fixed;right: 110px" @click="save">保存</el-button>
-      <el-button style="position: fixed;right: 30px" type="primary">分享</el-button>
+      <el-button style="position: fixed;right: 110px;margin-top: 2px" @click="save" size="medium">保存</el-button>
+      <el-button style="position: fixed;right: 30px;margin-top: 2px" type="primary" size="medium">分享</el-button>
     </div>
     <Toolbar
+        class="tool"
         style="border-bottom: 3px solid #f9fafb"
         :editor="editor"
         :defaultConfig="toolbarConfig"
         :mode="mode"
     />
     <Editor
-        style="height: 500px; overflow-y: hidden;"
+        class="main"
+        style="height: 550px; overflow-y: hidden;"
         v-model="html"
         :defaultConfig="editorConfig"
         :mode="mode"
@@ -168,6 +170,7 @@ export default {
     })
   },
   beforeDestroy() {
+    this.save()
     const editor = this.editor
     if (editor == null) return
     editor.destroy() // 组件销毁时，及时销毁编辑器
@@ -194,11 +197,29 @@ html.dark {
   }
 }
 
+.tool{
+  @include border-bottom_color("aside_color");
+}
+
 .editor {
-  background-color: #FFF;
-  border: 3px solid #f9fafb;
-  border-radius: 0.75rem;
-  border-bottom: none;
+  border: 3px solid rgb(249,250,251);
+  border-radius: 0.3rem;
+  ::v-deep .w-e-text-container{
+    @include background_color("background_color");
+    @include font_color("aside_text-color");
+  }
+  ::v-deep .w-e-bar{
+    @include background_color("background_color");
+  }
+  .el-input{
+    @include background_color("background_color");
+    @include font_color("aside_text-color");
+    @include border-bottom_color("aside_color")
+  }
+  ::v-deep .el-input__inner{
+    @include background_color("background_color");
+    @include font_color("aside_text-color");
+  }
 }
 
 ::v-deep .w-e-bar-item {
@@ -206,7 +227,7 @@ html.dark {
 }
 
 ::v-deep .el-input__inner {
-  border: 1px solid #f9fafb;
+  border: none;
   font-size: 20px;
   font-weight: 500;
   width: 210px;

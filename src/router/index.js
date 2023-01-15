@@ -3,9 +3,10 @@ import VueRouter from 'vue-router'
 import Welcome from "@/views/Welcome";
 import Home from "@/views/Home";
 import RichText from "@/components/RichText";
-import Files from "@/views/Files";
-import WorkSpace from "@/views/WorkSpace";
-import StarFile from "@/views/StarFile";
+import Files from "@/components/Files";
+import WorkSpace from "@/components/WorkSpace";
+import StarFile from "@/components/StarFile";
+import Trash from "@/components/Trash";
 
 
 Vue.use(VueRouter)
@@ -44,6 +45,11 @@ const routes = [
         path: '/note/starFile',
         name: 'StarFile',
         component: StarFile,
+      },
+      {
+        path: '/note/trash',
+        name: 'Trash',
+        component: Trash
       }
     ]
   },

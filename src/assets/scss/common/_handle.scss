@@ -36,3 +36,9 @@
     stroke: themed($color)!important;
   }
 }
+
+@mixin border-bottom_color($color){
+  @include themeify{
+    border-bottom: 3px solid themed($color) !important;
+  }
+}

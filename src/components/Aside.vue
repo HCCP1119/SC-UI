@@ -151,7 +151,7 @@
               @select="menuItemClick"
               :default-active="dfa"
           >
-            <el-menu-item index="/note/workspace/1">
+            <el-menu-item index="/note/workspace/list">
               <template slot="title">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="20" height="20"
                      viewBox="0 0 24 24" stroke-width="1.5" stroke="#00abfb" fill="none" stroke-linecap="round"
@@ -196,14 +196,13 @@
                 node-key="id"
                 @node-click="handleNodeClick">
                <span class="custom-tree-node" slot-scope="{ node, data }">
-                  <span v-show="!node.data.edit">
+                  <div class="node-label" v-show="!node.data.edit">
                     <el-image :src="require('@/assets/images/' + node.data.icon + '.png')"
-                              style="padding-right: 5px;padding-top: 5px;width: 20px;height: 20px"></el-image>
-                    <div style="float: right;margin-top: 5px" v-if="!node.data.isEdit">
-                      {{ node.label }}
-                    </div>
-                  </span>
+                              style="padding-right: 8px;padding-top: 5px;width: 20px;height: 20px"></el-image>
+                      <span style="" v-if="!node.data.isEdit">{{node.label}}</span>
+                  </div>
                      <el-input
+                         style="padding-left: 5px"
                          ref="labelInput"
                          type="text"
                          v-model="workspaceLabel"
@@ -213,7 +212,8 @@
                      >
                      </el-input>
                    <span>
-                  <el-dropdown trigger="hover" placement="bottom-start">
+                     <div class="dropdown">
+                       <el-dropdown trigger="hover" placement="bottom-start">
                   <span class="el-dropdown-link">
                    <i class="el-icon-plus"></i>
                   </span>
@@ -236,8 +236,7 @@
                       </el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>
-
-                 <el-dropdown trigger="hover" placement="bottom-start">
+                       <el-dropdown trigger="hover" placement="bottom-start">
                   <span class="el-dropdown-link">
                    <i class="el-icon-more"></i>
                   </span>
@@ -263,6 +262,7 @@
                       </el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>
+                     </div>
                   </span>
                </span>
             </el-tree>
@@ -271,39 +271,43 @@
             </div>
           </div>
           <div class="aside-footer">
-            <div class="addWorkspace">
-              <el-button type="text" @click="restore">
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-share" width="15" height="15" viewBox="0 0 24 24" stroke-width="1.5" stroke="#00abfb" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                <circle cx="6" cy="12" r="3" />
-                <circle cx="18" cy="6" r="3" />
-                <circle cx="18" cy="18" r="3" />
-                <line x1="8.7" y1="10.7" x2="15.3" y2="7.3" />
-                <line x1="8.7" y1="13.3" x2="15.3" y2="16.7" />
-              </svg>
-                <span>分享</span>
-              </el-button>
-            </div>
-            <div class="addWorkspace">
-              <el-button type="text" @click="restore">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-recycle" width="15" height="15" viewBox="0 0 24 24" stroke-width="1.5" stroke="#00abfb" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                  <path d="M12 17l-2 2l2 2m-2 -2h9a2 2 0 0 0 1.75 -2.75l-.55 -1" />
-                  <path d="M12 17l-2 2l2 2m-2 -2h9a2 2 0 0 0 1.75 -2.75l-.55 -1" transform="rotate(120 12 13)" />
-                  <path d="M12 17l-2 2l2 2m-2 -2h9a2 2 0 0 0 1.75 -2.75l-.55 -1" transform="rotate(240 12 13)" />
-                </svg>
-                <span>回收站</span>
-              </el-button>
-            </div>
-            <div class="addWorkspace">
-              <el-button type="text">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="15" height="15" viewBox="0 0 24 24" stroke-width="1.5" stroke="#00abfb" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                  <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
-                <span>设置</span>
-              </el-button>
+            <div>
+              <el-menu
+                  ref="menu"
+                  @select="menuItemClick"
+                  :default-active="dfa"
+              >
+                <el-menu-item index="/note/workspace/1">
+                  <template slot="title">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-share" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#00abfb" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                      <circle cx="6" cy="12" r="3" />
+                      <circle cx="18" cy="6" r="3" />
+                      <circle cx="18" cy="18" r="3" />
+                      <line x1="8.7" y1="10.7" x2="15.3" y2="7.3" />
+                      <line x1="8.7" y1="13.3" x2="15.3" y2="16.7" />
+                    </svg>
+                    <span slot="title">分享</span>
+                  </template>
+                </el-menu-item>
+                <el-menu-item index="/note/trash">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-recycle" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#00abfb" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M12 17l-2 2l2 2m-2 -2h9a2 2 0 0 0 1.75 -2.75l-.55 -1" />
+                    <path d="M12 17l-2 2l2 2m-2 -2h9a2 2 0 0 0 1.75 -2.75l-.55 -1" transform="rotate(120 12 13)" />
+                    <path d="M12 17l-2 2l2 2m-2 -2h9a2 2 0 0 0 1.75 -2.75l-.55 -1" transform="rotate(240 12 13)" />
+                  </svg>
+                  <span slot="title">回收站</span>
+                </el-menu-item>
+                <el-menu-item index="/note/files">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#00abfb" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                  <span slot="title">设置</span>
+                </el-menu-item>
+              </el-menu>
             </div>
           </div>
         </div>
@@ -417,7 +421,8 @@ export default {
         url: `/note/remove/${data.id}`,
         method: 'delete',
       }).then(()=>{
-        this.$bus.$emit("refresh")
+        this.$bus.$emit("WorkspaceRefresh")
+        this.$bus.$emit("TrashRefresh")
       })
     },
 
@@ -519,6 +524,7 @@ export default {
           data={
             "id": node.data.id,
             "label": node.data.label,
+            "type": node.data.type
           }
         }
         this.$axios({
@@ -597,7 +603,7 @@ export default {
     }))
   },
   mounted() {
-    this.$bus.$on("refreshAside",()=>{
+    this.$bus.$on("AsideRefresh",()=>{
       this.$axios({
         url: `/note/getTree`,
         method: 'get',
@@ -689,11 +695,6 @@ html, body {
   padding: 0;
 }
 
-//::v-deep .el-tree-node:focus > .el-tree-node__content {
-//  background: #e7ebed;
-//  border-radius: 0.8em;
-//}
-
 .workspace{
   ::v-deep .el-tree-node__content:hover {
     border-radius: 0.8em;
@@ -730,6 +731,14 @@ html, body {
   width: 95%;
 }
 
+.node-label{
+  max-width: 110px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis
+}
+
 .el-icon-plus:hover, .el-icon-more:hover {
   background-color: white;
   border-radius: 0.4em;
@@ -764,18 +773,19 @@ html, body {
   justify-content: space-between;
   font-size: 14px;
   padding-right: 8px;
+  font-weight: 500;
+  ::v-deep .el-input__inner{
+    @include background_color("background_color");
+    @include font_color("aside_text-color");
+  }
 }
 
 svg {
   padding-right: 10px;
 }
 
-.aside-footer{
-  position: absolute;
-  top: 80%;
-}
 .workspace{
-  height: 300px;
+  height: 280px;
   display: block;
   overflow-y: scroll;
 }
