@@ -18,6 +18,7 @@
         :mode="mode"
     />
     <Editor
+        v-loading="loading"
         class="main"
         style="height: 550px; overflow-y: hidden;"
         v-model="html"
@@ -45,6 +46,7 @@ export default {
   data() {
     return {
       editor: null,
+      loading: true,
       noteId: '',
       title: '',
       html: '',
@@ -102,9 +104,9 @@ export default {
     html(newVal, oldVal) {
       const reg = /(?<=img src=").*?(?=" alt=)/g
       if (oldVal.length > newVal.length) {
-        const oldImgList = oldVal.match(reg)===null?[]:oldVal.match(reg)
-        const newImgList = newVal.match(reg)===null?[]:newVal.match(reg)
-        if (this._.difference(oldImgList, newImgList)[0]!==undefined){
+        const oldImgList = oldVal.match(reg) === null ? [] : oldVal.match(reg)
+        const newImgList = newVal.match(reg) === null ? [] : newVal.match(reg)
+        if (this._.difference(oldImgList, newImgList)[0] !== undefined) {
           this.removeImgList.push(this._.difference(oldImgList, newImgList)[0])
         }
       }
@@ -115,11 +117,11 @@ export default {
     onCreated(editor) {
       this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
     },
-    saveTitle(){
+    saveTitle() {
       this.$axios({
         url: `/note/saveTitle/${this.noteId}/${this.title}`,
         method: 'post'
-      }).then(() =>{
+      }).then(() => {
         this.$bus.$emit("refreshAside")
       })
     },
@@ -143,12 +145,8 @@ export default {
             "removeImgList": this.removeImgList
           }
         })
-      ]).then(axios.spread((data1, data2) => {
-        this.removeImgList=[]
-        this.$message({
-          message: data1.data.msg,
-          type: 'success'
-        })
+      ]).then(axios.spread(() => {
+        this.removeImgList = []
       }))
 
     }
@@ -160,12 +158,13 @@ export default {
       url: `/note/getNote/${id}`,
       method: 'get'
     }).then(res => {
+      this.loading = false
       this.title = res.data.data.title
       this.html = res.data.data.content
     })
   },
   mounted() {
-    this.$bus.$on("resetTitle",(title)=>{
+    this.$bus.$on("resetTitle", (title) => {
       this.title = title
     })
   },
@@ -175,7 +174,7 @@ export default {
     if (editor == null) return
     editor.destroy() // 组件销毁时，及时销毁编辑器
   },
-  beforeRouteUpdate(to,from,next){
+  beforeRouteUpdate(to, from, next) {
     this.save()
     next()
   }
@@ -197,28 +196,36 @@ html.dark {
   }
 }
 
-.tool{
+.tool {
   @include border-bottom_color("aside_color");
 }
 
 .editor {
-  border: 3px solid rgb(249,250,251);
+  border: 3px solid rgb(249, 250, 251);
   border-radius: 0.3rem;
-  ::v-deep .w-e-text-container{
+
+  ::v-deep .w-e-text-container {
     @include background_color("background_color");
     @include font_color("aside_text-color");
   }
-  ::v-deep .w-e-bar{
+
+  ::v-deep .w-e-bar {
     @include background_color("background_color");
   }
-  .el-input{
+
+  .el-input {
     @include background_color("background_color");
     @include font_color("aside_text-color");
     @include border-bottom_color("aside_color")
   }
-  ::v-deep .el-input__inner{
+
+  ::v-deep .el-input__inner {
     @include background_color("background_color");
     @include font_color("aside_text-color");
+  }
+
+  ::v-deep .el-loading-mask {
+    @include background_color("background_color");
   }
 }
 

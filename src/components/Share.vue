@@ -6,12 +6,7 @@
 
 <script>
 export default {
-  name: "StarFile",
-  data() {
-    return {
-      visible: false,
-    };
-  }
+  name: "Share"
 }
 </script>
 

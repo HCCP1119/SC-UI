@@ -7,7 +7,7 @@
           <el-tab-pane label="删除列表" name="first"></el-tab-pane>
         </el-tabs>
       </el-header>
-      <el-main>
+      <el-main v-loading="loading">
         <div style="margin-top: -20px">
           <div class="main-data">
             <el-row v-for="col in removeList" :key="col.id">
@@ -71,6 +71,7 @@ export default {
   data() {
     return {
       removeList: [],
+      loading:true,
     }
   },
   methods: {
@@ -78,6 +79,15 @@ export default {
       this.$axios({
         url: `http://localhost:8003/note/restore/${id}`,
         method: 'post'
+      }).then(() => {
+        this.getData()
+        this.$bus.$emit("AsideRefresh")
+      })
+    },
+    remove(id){
+      this.$axios({
+        url: `http://localhost:8003/note/delete/${id}`,
+        method: 'delete'
       }).then(() => {
         this.getData()
         this.$bus.$emit("AsideRefresh")
@@ -91,6 +101,7 @@ export default {
           "uid": localStorage.getItem('uid')
         }
       }).then(res => {
+        this.loading = false
         this.removeList = res.data.data
         console.log(this.removeList)
       })
@@ -149,5 +160,11 @@ export default {
 .el-dropdown-menu__item:hover {
   @include font_color("aside_text-color");
   @include background_color("hover_background_color");
+}
+
+.el-main{
+  ::v-deep .el-loading-mask{
+    @include background_color("background_color");
+  }
 }
 </style>

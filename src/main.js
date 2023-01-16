@@ -15,7 +15,7 @@ import {
     MessageBox, Tabs, Pagination,
     Loading, Table, TableColumn,
     Divider, Upload, RadioGroup,
-    RadioButton, DatePicker,
+    RadioButton, DatePicker,Empty,
 } from "element-ui";
 import store from './store'
 // import axios from "axios";
@@ -30,6 +30,7 @@ Vue.use(Header)
 Vue.use(Main)
 Vue.use(Aside)
 Vue.use(Row)
+Vue.use(Empty)
 Vue.use(Col)
 Vue.use(Menu)
 Vue.use(Submenu)

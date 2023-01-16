@@ -5,8 +5,8 @@ import Home from "@/views/Home";
 import RichText from "@/components/RichText";
 import Files from "@/components/Files";
 import WorkSpace from "@/components/WorkSpace";
-import StarFile from "@/components/StarFile";
 import Trash from "@/components/Trash";
+import StarNote from "@/components/StarNote";
 
 
 Vue.use(VueRouter)
@@ -42,9 +42,9 @@ const routes = [
         component: WorkSpace,
       },
       {
-        path: '/note/starFile',
-        name: 'StarFile',
-        component: StarFile,
+        path: '/note/starNote',
+        name: 'StarNote',
+        component: StarNote,
       },
       {
         path: '/note/trash',

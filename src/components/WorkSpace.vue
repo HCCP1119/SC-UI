@@ -23,7 +23,7 @@
           </el-tab-pane>
         </el-tabs>
       </el-header>
-      <el-main>
+      <el-main v-loading="loading">
         <div style="margin-top: -20px">
           <div class="main-data">
             <el-row v-for="col in rolList" :key="col.id">
@@ -163,6 +163,7 @@ export default {
     return {
       dialogVisible: false,
       query: null,
+      loading: true,
       workspaces: [],
       rolList: [],
       editableTabsValue: 'list',
@@ -327,6 +328,7 @@ export default {
           "uid": uid
         }
       }).then(res => {
+        this.loading = false
         this.workspaces = res.data.data
         this.rolList = this.workspaces
       })
@@ -441,5 +443,11 @@ export default {
 .el-dropdown-menu__item:hover {
   @include font_color("aside_text-color");
   @include background_color("hover_background_color");
+}
+
+.el-main{
+  ::v-deep .el-loading-mask{
+    @include background_color("background_color");
+  }
 }
 </style>

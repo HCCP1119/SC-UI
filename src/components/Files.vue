@@ -39,8 +39,8 @@
           <el-tab-pane label="文件列表" name="first"></el-tab-pane>
         </el-tabs>
       </el-header>
-      <el-main>
-        <div style="margin-left: -30px;margin-top: -35px">
+      <el-main v-loading="loading">
+        <div style="margin-left: -30px;margin-top: -35px" class="main-data">
           <el-row :gutter="20">
             <el-col :span="4" v-for="(file, index) in files" :key="file.id" :offset="index > 0 ? 0 : 0"
                     style="width: 200px;padding-top: 15px;margin-left: 30px">
@@ -114,12 +114,14 @@
 </template>
 
 <script>
+
 export default {
   name: "Files",
   computed: {},
   data() {
     return {
       files: [],
+      loading: true,
       bkFiles: [],
       fileName: '',
       sequence: 'ASC',
@@ -222,6 +224,7 @@ export default {
         "uid": this.uid
       }
     }).then(res => {
+      this.loading = false
       this.bkFiles = res.data.data
       this.total = this.bkFiles.length
       this.files = this.bkFiles.slice((this.currentPage - 1) * 10, this.currentPage * 10)
@@ -232,6 +235,10 @@ export default {
 
 <style scoped lang="scss">
 @import "src/assets/scss/common/common";
+
+[v-cloak]{
+  display: none;
+}
 
 .imageLayer {
   width: 200px;
@@ -301,10 +308,10 @@ export default {
   line-height: 32px;
 }
 
-//.el-radio-group{
-//  ::v-deep .el-radio-button__inner{
-//    @include background_color("background_color");
-//    @include font_color("text-color")
-//  }
-//}
+.el-main{
+  ::v-deep .el-loading-mask{
+    @include background_color("background_color");
+  }
+}
+
 </style>
