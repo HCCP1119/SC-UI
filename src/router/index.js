@@ -7,6 +7,7 @@ import Files from "@/components/Files";
 import WorkSpace from "@/components/WorkSpace";
 import Trash from "@/components/Trash";
 import StarNote from "@/components/StarNote";
+import Share from "@/components/Share";
 
 
 Vue.use(VueRouter)
@@ -45,6 +46,11 @@ const routes = [
         path: '/note/starNote',
         name: 'StarNote',
         component: StarNote,
+      },
+      {
+        path: '/note/share',
+        name: 'Share',
+        component: Share
       },
       {
         path: '/note/trash',

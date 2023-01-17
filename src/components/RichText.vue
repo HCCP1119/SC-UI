@@ -7,7 +7,7 @@
           @blur="saveTitle"
       >
       </el-input>
-      <el-button style="position: fixed;right: 110px;margin-top: 2px" @click="save" size="medium">保存</el-button>
+      <el-button style="position: fixed;right: 110px;margin-top: 2px" @click="save" size="medium" :loading="saveLoading">保存</el-button>
       <el-button style="position: fixed;right: 30px;margin-top: 2px" type="primary" size="medium">分享</el-button>
     </div>
     <Toolbar
@@ -47,6 +47,7 @@ export default {
     return {
       editor: null,
       loading: true,
+      saveLoading: false,
       noteId: '',
       title: '',
       html: '',
@@ -126,7 +127,7 @@ export default {
       })
     },
     save() {
-      console.log(this.removeImgList)
+      this.saveLoading = true
       this.$axios.all([
         this.$axios({
           url: `/note/saveNote`,
@@ -147,8 +148,8 @@ export default {
         })
       ]).then(axios.spread(() => {
         this.removeImgList = []
+        this.saveLoading = false
       }))
-
     }
   },
   created() {
@@ -226,6 +227,19 @@ html.dark {
 
   ::v-deep .el-loading-mask {
     @include background_color("background_color");
+  }
+
+  ::v-deep .w-e-text-container [data-slate-editor] blockquote{
+    @include background_color("editor_slight_bg_color");
+  }
+
+  ::v-deep .w-e-text-container [data-slate-editor] table th{
+    @include background_color("editor_slight_bg_color");
+  }
+
+  ::v-deep .w-e-text-container [data-slate-editor] pre > code{
+    @include background_color("editor_slight_bg_color");
+    text-shadow: none;
   }
 }
 

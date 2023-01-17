@@ -5,7 +5,7 @@
         <el-button
             size="small"
             type="primary"
-            @click="dialogVisible = true;">
+            @click="queryDig = true;">
           <i class="el-icon-search"></i>
           搜索笔记
         </el-button>
@@ -69,7 +69,7 @@
               </div>
             </el-row>
             <el-dialog
-                :visible.sync="dialogVisible"
+                :visible.sync="queryDig"
                 :before-close="dialogClose"
                 :close-on-click-modal="false"
                 width="40%"
@@ -161,7 +161,7 @@ export default {
   name: "WorkSpace",
   data() {
     return {
-      dialogVisible: false,
+      queryDig: false,
       query: null,
       loading: true,
       workspaces: [],
@@ -234,7 +234,7 @@ export default {
         method:"delete"
       }).then(() => {
         this.getData()
-        this.$bus.$emit("refreshAside")
+        this.$bus.$emit("AsideRefresh")
       })
     },
     pushNote(id){
@@ -312,7 +312,7 @@ export default {
       })
     },
     dialogClose(){
-      this.dialogVisible = false
+      this.queryDig = false
       this.query = null
       this.createTime.splice(0)
       this.updateTime.splice(0)

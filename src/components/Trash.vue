@@ -48,12 +48,36 @@
                               style="padding-right: 0;padding-left: 0;color: #F56C6C"
                               type="text"
                               size="mini"
-                              @click="() => remove(col.id)">
+                              @click="visible=true">
                             <span style="font-size: 14px">删除</span>
                           </el-button>
                         </el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
+                    <el-dialog
+                        :visible.sync="visible"
+                        width="30%"
+                        :close-on-click-modal="false"
+                    >
+                      <span style="">永久删除的文件无法恢复，请谨慎操作</span>
+                      <template slot="title">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alert-circle"
+                             width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ff9300" fill="none"
+                             stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                          <circle cx="12" cy="12" r="9"/>
+                          <line x1="12" y1="8" x2="12" y2="12"/>
+                          <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                        <div style="position: absolute;left: 50px;top: 20px">
+                          <span style="font-weight: 500;color: black">确认删除？</span>
+                        </div>
+                      </template>
+                      <span slot="footer" class="dialog-footer">
+                        <el-button @click="visible = false" size="medium">取消</el-button>
+                        <el-button type="danger" @click="remove(col.id)" size="medium">永久删除</el-button>
+                         </span>
+                    </el-dialog>
                   </div>
                 </el-col>
               </div>
@@ -70,6 +94,7 @@ export default {
   name: "Trash",
   data() {
     return {
+      visible:false,
       removeList: [],
       loading:true,
     }
@@ -103,7 +128,6 @@ export default {
       }).then(res => {
         this.loading = false
         this.removeList = res.data.data
-        console.log(this.removeList)
       })
     }
   },
@@ -165,6 +189,29 @@ export default {
 .el-main{
   ::v-deep .el-loading-mask{
     @include background_color("background_color");
+  }
+  ::v-deep .el-dialog{
+    position: absolute;
+    top: 151px;
+    left: 568px;
+    width: 400px !important;
+    height: 130px!important;
+    box-shadow: none;
+    border-radius: 6px;
+
+    ::v-deep .el-button{
+      padding-top: 8px!important;
+      padding-bottom: 8px!important;
+    }
+  }
+
+  ::v-deep .el-dialog__body {
+    padding-top: 0!important;
+  }
+  ::v-deep .el-dialog__footer{
+    height: 32px!important;
+    padding-top: 5px;
+    padding-bottom: 0;
   }
 }
 </style>

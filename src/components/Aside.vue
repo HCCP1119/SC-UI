@@ -268,7 +268,7 @@
                             style="padding-right: 0;padding-left: 0"
                             type="text"
                             size="mini"
-                            @click="() => remove(node, data)">
+                            @click="() => shared(data.id)">
                           <span style="font-size: 14px">分享</span>
                         </el-button>
                       </el-dropdown-item>
@@ -277,7 +277,7 @@
                             style="padding-right: 0;padding-left: 0"
                             type="text"
                             size="mini"
-                            @click="() => remove(node, data)">
+                            @click="() => stared(data.id)">
                           <span style="font-size: 14px">加星</span>
                         </el-button>
                       </el-dropdown-item>
@@ -306,7 +306,7 @@
                   ref="menu"
                   @select="menuItemClick"
               >
-                <el-menu-item index="/note/workspace/1">
+                <el-menu-item index="/note/share">
                   <template slot="title">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-share" width="20"
                          height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#00abfb" fill="none"
@@ -440,6 +440,10 @@ export default {
       }).then(() => {
         this.$bus.$emit("WorkspaceRefresh")
         this.$bus.$emit("TrashRefresh")
+        this.$bus.$emit("ShareRefresh")
+        if (data.type==='note'){
+          this.$router.push('/note/trash')
+        }
       })
     },
 
@@ -558,6 +562,26 @@ export default {
           }
         })
       }
+    },
+
+    //笔记加星
+    stared(id){
+      this.$axios({
+        url: `http://localhost:8003/note/star/stared/${id}`,
+        method: 'post'
+      }).then(() => {
+        this.$bus.$emit("StarNoteRefresh")
+      })
+    },
+
+    //分享
+    shared(id){
+      this.$axios({
+        url: `http://localhost:8003/note/share/shared/${id}`,
+        method: 'post'
+      }).then(() => {
+        this.$bus.$emit("ShareRefresh")
+      })
     },
 
     //用户头像上传成功回调
