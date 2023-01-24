@@ -2,6 +2,9 @@ import axios from "axios";
 import {Message, MessageBox} from "element-ui";
 import router from "@/router";
 
+// 是否显示重新登录
+export let isRelogin = { show: false };
+
 const request = axios.create({
     baseURL: "http://localhost:9200/"
 });
@@ -13,7 +16,7 @@ request.spread = axios.spread
 request.interceptors.request.use((config) => {
         const isToken = config.headers['isToken'] === false
         if (!isToken) {
-            config.headers['Authorization'] = localStorage.getItem("token");
+            config.headers['satoken'] = localStorage.getItem("token");
         }
         return config;
     },
@@ -23,40 +26,49 @@ request.interceptors.request.use((config) => {
 )
 //添加响应拦截器，判断是否有令牌刷新
 request.interceptors.response.use(res => {
-        if (res.headers['new-token'] !== undefined) {
-            localStorage.setItem("token", res.headers['new-token']);
-            console.log("newToken")
-        }
         if (res.data.code === 401) {
-            console.log(res.data.msg)
-            MessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', {
-                    confirmButtonText: '重新登录',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }
-            ).then(() => {
-                console.log(res.data.msg)
-            })
+            if (!isRelogin.show){
+                isRelogin.show = true;
+                MessageBox.confirm('登录状态已过期，请重新登录', '系统提示', {
+                        confirmButtonText: '重新登录',
+                        showCancelButton: false,
+                        type: 'warning'
+                    }
+                ).then(() => {
+                    isRelogin.show = false;
+                    router.push("/").then(() => {
+                        Message({
+                            message: "请登录",
+                            type: 'warning',
+                            duration: 5 * 1000
+                        })
+                    })
+                })
+            }
         }
         return res;
     },
     error => {
         let { message } = error;
         if (message.includes("401")){
-            MessageBox.confirm('登录状态已过期，请重新登录', '系统提示', {
-                    confirmButtonText: '确定',
-                    showCancelButton: false,
-                    type: 'warning'
-                }
-            ).then(() => {
-                router.push("/").then(() => {
-                    Message({
-                        message: "请登录",
-                        type: 'warning',
-                        duration: 5 * 1000
+            if (!isRelogin.show){
+                isRelogin.show = true;
+                MessageBox.confirm('登录状态已过期，请重新登录', '系统提示', {
+                        confirmButtonText: '确定',
+                        showCancelButton: false,
+                        type: 'warning'
+                    }
+                ).then(() => {
+                    isRelogin.show = false;
+                    router.push("/").then(() => {
+                        Message({
+                            message: "请登录",
+                            type: 'warning',
+                            duration: 5 * 1000
+                        })
                     })
                 })
-            })
+            }
         }
         else if (message.includes("timeout")){
             Message({
@@ -72,7 +84,6 @@ request.interceptors.response.use(res => {
                 duration: 5 * 1000
             })
         }
-        console.log(error)
         return Promise.reject(error)
     }
 )

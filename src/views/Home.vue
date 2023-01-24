@@ -47,23 +47,6 @@ export default {
   mounted() {
 
   },
-  created() {
-    // const token = localStorage.getItem("token");
-    // //console.log("Bearer "+token)
-    // this.$axios({
-    //   headers: {"isToken" : false},
-    //   url: "/auth/test1",
-    // }).then(
-    //     res => {
-    //       //console.log(res)
-    //     },
-    //     (e) => {
-    //       //console.log(e.response.data)
-    //       // this.$bus.$emit("logDig",true);
-    //       // this.$router.push("/");
-    //     }
-    // )
-  }
 }
 </script>
 

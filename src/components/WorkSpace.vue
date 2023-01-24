@@ -278,13 +278,6 @@ export default {
       } else {
         this.$router.push({
           path: `/note/workspace/${tab.name}`,
-        }).then(() => {
-          // this.$axios({
-          //   url: `/note/getTree/${tab.name}`,
-          //   method: 'get',
-          // }).then(res => {
-          //   this.rolList = res.data.data
-          // })
         })
       }
     },
@@ -320,13 +313,9 @@ export default {
     },
 
     getData(){
-      const uid = Number(localStorage.getItem("uid"))
       this.$axios({
         url: `/note/getTree`,
         method: 'get',
-        params:{
-          "uid": uid
-        }
       }).then(res => {
         this.loading = false
         this.workspaces = res.data.data

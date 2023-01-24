@@ -66,7 +66,7 @@ export default {
           uploadImage: {
             server: 'http://localhost:9200/file/noteImage',
             headers: {
-              'Authorization': localStorage.getItem("token")
+              'satoken': localStorage.getItem("token")
             },
             fieldName: 'img',
             maxImgSize: 5 * 1024 * 1024,
@@ -140,7 +140,7 @@ export default {
           }
         }),
         this.$axios({
-          url: `http://localhost:8004/file/removeNoteImg`,
+          url: `/file/removeNoteImg`,
           method: 'delete',
           data: {
             "removeImgList": this.removeImgList

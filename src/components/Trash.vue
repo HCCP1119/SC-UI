@@ -102,7 +102,7 @@ export default {
   methods: {
     restore(id) {
       this.$axios({
-        url: `http://localhost:8003/note/restore/${id}`,
+        url: `/note/restore/${id}`,
         method: 'post'
       }).then(() => {
         this.getData()
@@ -111,7 +111,7 @@ export default {
     },
     remove(id){
       this.$axios({
-        url: `http://localhost:8003/note/delete/${id}`,
+        url: `/note/delete/${id}`,
         method: 'delete'
       }).then(() => {
         this.getData()
@@ -122,9 +122,6 @@ export default {
       this.$axios({
         url: '/note/removeList',
         method: 'get',
-        params: {
-          "uid": localStorage.getItem('uid')
-        }
       }).then(res => {
         this.loading = false
         this.removeList = res.data.data

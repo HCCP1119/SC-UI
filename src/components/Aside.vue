@@ -124,7 +124,7 @@
                   :headers="headerObj"
                   accept=".jpg,.jpeg,.png"
                   :on-success="uploadSuccess"
-                  :data="{'uid':this.user.id}"
+                  :data="{'':this.user.id}"
                   :show-file-list="false">
                 <el-button size="mini" round>上传新头像</el-button>
                 <div slot="tip" class="el-upload__tip" style="font-size: 3px;margin-top: 4px">支持JPG、PNG、GIF格式</div>
@@ -332,7 +332,7 @@
                   </svg>
                   <span slot="title">回收站</span>
                 </el-menu-item>
-                <el-menu-item index="/note/files">
+                <el-menu-item index="/note/setting/info">
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="20"
                        height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#00abfb" fill="none"
                        stroke-linecap="round" stroke-linejoin="round">
@@ -360,7 +360,7 @@ export default {
   name: "Aside",
   data() {
     return {
-      headerObj: {'Authorization': localStorage.getItem('token')},
+      headerObj: {'satoken': localStorage.getItem('token')},
       workspaceLabel: '',
       expand: false,
       dialog: false,
@@ -522,7 +522,6 @@ export default {
             "icon": node.data.icon,
             "isEdit": node.data.isEdit,
             "parentId": node.parent.data.id,
-            "uid": localStorage.getItem("uid")
           }
         } else if (!node.data.rename) {
           src = '/note/addWorkspace'
@@ -534,7 +533,6 @@ export default {
             "icon": node.data.icon,
             "isEdit": node.data.isEdit,
             "parentId": node.parent.data.id,
-            "uid": localStorage.getItem("uid")
           }
         } else if (node.data.rename) {
           src = "/note/rename"
@@ -567,7 +565,7 @@ export default {
     //笔记加星
     stared(id){
       this.$axios({
-        url: `http://localhost:8003/note/star/stared/${id}`,
+        url: `/note/star/stared/${id}`,
         method: 'post'
       }).then(() => {
         this.$bus.$emit("StarNoteRefresh")
@@ -577,7 +575,7 @@ export default {
     //分享
     shared(id){
       this.$axios({
-        url: `http://localhost:8003/note/share/shared/${id}`,
+        url: `/note/share/shared/${id}`,
         method: 'post'
       }).then(() => {
         this.$bus.$emit("ShareRefresh")
@@ -595,10 +593,9 @@ export default {
     //保存用户信息
     saveInfo() {
       this.$axios({
-        url: "/auth/saveInfo",
+        url: "/users/saveInfo",
         method: 'post',
         params: {
-          "uid": Number(localStorage.getItem("uid")),
           "nickname": this.nickname,
           "introduce": this.introduce
         }
@@ -630,23 +627,21 @@ export default {
       this.$axios({
         url: `/note/getTree`,
         method: 'get',
-        params: {
-          "uid": Number(localStorage.getItem("uid"))
-        }
       }),
       this.$axios({
-        url: `/auth/getUser`,
-        method: 'post',
-        params: {
-          "uid": Number(localStorage.getItem("uid"))
-        }
+        url: `/users/getUser`,
+        method: 'get',
       })
     ]).then(axios.spread((data1, data2) => {
-      this.workspace = data1.data.data
-      this.user = data2.data.data.user
-      this.userInfo = data2.data.data.userinfo
-      this.nickname = data2.data.data.user.nickname
-      this.introduce = data2.data.data.userinfo.introduce
+      if (data1.data.code===200){
+        this.workspace = data1.data.data
+      }
+      if (data2.data.code===200){
+        this.user = data2.data.data.user
+        this.userInfo = data2.data.data.userinfo
+        this.nickname = data2.data.data.user.nickname
+        this.introduce = data2.data.data.userinfo.introduce
+      }
     }))
   },
   mounted() {
@@ -654,9 +649,6 @@ export default {
       this.$axios({
         url: `/note/getTree`,
         method: 'get',
-        params: {
-          "uid": Number(localStorage.getItem("uid"))
-        }
       }).then(res => {
         this.workspace = res.data.data
       })

@@ -143,20 +143,26 @@ export default {
     login() {
       this.$refs.loginForm.validate(v => {
         if (v) {
-          let formData = new FormData();
-          formData.append("username", this.loginForm.username);
-          formData.append("password", this.loginForm.password)
           this.$axios({
-            url: '/auth/login',
+            url: '/login',
             method: 'post',
             headers: {"isToken":false},
-            data: formData
-          }).then(
-              res => {
-               // console.log(res.headers)
-                localStorage.setItem("token", res.headers['authorization'])
-                localStorage.setItem("uid", res.data.data)
-                this.$router.push("/note/workspace/list")
+            data: {
+              "username":this.loginForm.username,
+              "password": this.loginForm.password
+            }
+          }).then(res => {
+                console.log(res)
+                if (res.data.code===500){
+                  this.$message({
+                    message: res.data.msg,
+                    type: 'error'
+                  });
+                }else {
+                  localStorage.setItem("token", "Bearer " + res.headers['authorization'])
+                  localStorage.setItem("uid", res.data.data)
+                  this.$router.push("/note/workspace/list")
+                }
               },
               error => {
                 console.log(error)
@@ -177,7 +183,7 @@ export default {
     register() {
       this.$refs.ruleForm.validate(v => {
         if (v) {
-          this.$axios.post("/auth/register", this.regForm).then(
+          this.$axios.post("/register", this.regForm).then(
               res => {
                 this.$message({
                   message: res.data.msg,
@@ -188,8 +194,6 @@ export default {
                   this.loginDia = true;
                 }, 2000)
                 this.loginForm.username = this.regForm.username;
-                console.log(res.data)
-                console.log(this.regForm)
               },
               error => {
                 this.$message({
@@ -225,7 +229,7 @@ export default {
         if (e.length === 0) {
           this.btn = "";
           this.loading = true;
-          this.$axios.post("/auth/register/" + this.regForm.email).then(
+          this.$axios.post("/register/" + this.regForm.email).then(
               res => {
                 this.loading = false;
                 if (res.data.code === 200) {

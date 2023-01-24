@@ -120,7 +120,7 @@ export default {
 
     unStar(id) {
       this.$axios({
-        url: `http://localhost:8003/note/star/unStar/${id}`,
+        url: `/note/star/unStar/${id}`,
         method: 'post'
       }).then(() => {
         this.getData()

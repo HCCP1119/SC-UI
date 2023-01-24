@@ -92,9 +92,6 @@ export default {
       this.$axios({
         url: '/note/shareList',
         method: 'get',
-        params: {
-          "uid": localStorage.getItem('uid')
-        }
       }).then(res => {
         this.loading = false
         this.bkList = res.data.data
@@ -103,7 +100,7 @@ export default {
     },
     unShare(id){
       this.$axios({
-        url: `http://localhost:8003/note/share/unShare/${id}`,
+        url: `/note/share/unShare/${id}`,
         method: 'post'
       }).then(() => {
         this.getData()

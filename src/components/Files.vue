@@ -25,9 +25,9 @@
           <div style="float: left">
             <el-upload
                 class="upload-demo"
-                action="http://localhost:8004/file/uploadFile"
+                action="http://localhost:9200/file/uploadFile"
+                :headers="headerObj"
                 name="file"
-                :data="{'uid':this.uid}"
                 :on-success="uploadSuccess"
                 :show-file-list="false"
             >
@@ -120,6 +120,7 @@ export default {
   computed: {},
   data() {
     return {
+      headerObj: {'satoken': localStorage.getItem('token')},
       files: [],
       loading: true,
       bkFiles: [],
@@ -129,13 +130,12 @@ export default {
       visible: false,
       total: 0,
       basis: 'upload_time',
-      uid: localStorage.getItem("uid"),
     }
   },
   watch: {
     sequence() {
       this.$axios({
-        url: `http://localhost:8004/file/getFiles/${this.basis}/${this.sequence}/${this.uid}`,
+        url: `/file/getFiles/${this.basis}/${this.sequence}`,
         method: 'get',
       }).then(res => {
         this.bkFiles = res.data.data
@@ -145,7 +145,7 @@ export default {
     },
     basis() {
       this.$axios({
-        url: `http://localhost:8004/file/getFiles/${this.basis}/${this.sequence}/${this.uid}`,
+        url: `/file/getFiles/${this.basis}/${this.sequence}`,
         method: 'get',
       }).then(res => {
         this.bkFiles = res.data.data
@@ -180,10 +180,9 @@ export default {
     },
     downloadFile(disk) {
       this.$axios({
-        url: `http://localhost:8004/file/download`,
+        url: `/file/download`,
         method: 'get',
         params: {
-          'id': this.uid,
           'disk': disk
         },
         responseType: 'blob'
@@ -202,10 +201,9 @@ export default {
     },
     removeFile(disk) {
       this.$axios({
-        url: `http://localhost:8004/file/remove`,
+        url: `/file/remove`,
         method: 'delete',
         params: {
-          'id': this.uid,
           'disk': disk
         },
       }).then(res => {
@@ -218,11 +216,8 @@ export default {
   },
   created() {
     this.$axios({
-      url: "http://localhost:8004/file/getFiles",
+      url: "/file/getFiles",
       method: 'get',
-      params: {
-        "uid": this.uid
-      }
     }).then(res => {
       this.loading = false
       this.bkFiles = res.data.data
