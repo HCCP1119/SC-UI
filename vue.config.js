@@ -5,6 +5,7 @@ module.exports = {
             errors: true
         },
         port: 80,
+        disableHostCheck: true,
     },
     lintOnSave: false //关闭eslint检查
 }

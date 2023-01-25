@@ -89,6 +89,7 @@
               <el-dropdown-item>
                 <el-button
                     style="padding-right: 0;padding-left: 0"
+                    @click="logout"
                     type="text"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-logout" width="15"
@@ -620,6 +621,20 @@ export default {
       this.dialog = false
       this.nickname = this.user.nickname
       this.introduce = this.userInfo.introduce
+    },
+
+    //退出登录
+    logout(){
+      this.$axios({
+        url: '/logout',
+        method: 'post'
+      }).then(res => {
+        if (res.data.code===200){
+          localStorage.removeItem("token")
+          localStorage.removeItem("uid")
+          this.$router.push("/")
+        }
+      })
     }
   },
   created() {
