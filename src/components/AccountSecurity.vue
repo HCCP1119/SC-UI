@@ -11,21 +11,32 @@
               </div>
             </el-col>
             <el-col :span="20" style="margin-top: -3px">
-              <div style="font-size: 20px">{{ col.token }}</div>
+              <div style="font-size: 20px" :style="{'text-decoration':col.status?'none':'line-through'}">{{ col.token }}</div>
               <div>
                 <span style="font-size: 10px;padding-right: 15px">{{ col.device}}/{{col.browser}}</span>
                 <span style="font-size: 10px;padding-right: 15px">登录时间：{{ col.loginTime}} | {{col.address}}</span>
                 <span style="font-size: 10px" v-if="col.updateTime!==null">登录ip：{{ col.ip }}</span>
               </div>
             </el-col>
-            <el-col :span="2">
+            <el-col :span="2" v-show="col.status">
               <div>
                 <el-button
-                    style="margin-left: 50px"
+                    :disabled="col.token===currentToken"
+                    type="primary"
+                    size="medium"
+                    @click="() => kickout(col.token)">
+                  下线
+                </el-button>
+              </div>
+            </el-col>
+            <el-col :span="2" v-show="!col.status">
+              <div v-show="!col.status">
+                <el-button
+                    :disabled="col.token===currentToken"
                     type="primary"
                     size="medium"
                     @click="() => remove(col.id)">
-                  <span style="font-size: 14px">删除</span>
+                  移除
                 </el-button>
               </div>
             </el-col>
@@ -42,15 +53,28 @@ export default {
   data(){
     return{
       tokenList:[],
+      currentToken: localStorage.getItem('token').substring(localStorage.getItem('token').lastIndexOf(".")+1),
     }
   },
   methods:{
-
+    kickout(token){
+      this.$axios({
+        url: '/users/kickout',
+        method: 'delete',
+        data:token
+      }).then(res =>{
+        this.tokenList = res.data.data
+      })
+    },
+    remove(id){
+      this.$axios.delete(`/users/delToken/${id}`).then(res => {
+        this.tokenList = res.data.data
+      })
+    }
   },
   created() {
     this.$axios.get("/users/token").then(res => {
       this.tokenList = res.data.data
-      console.log(res.data)
     })
   }
 }

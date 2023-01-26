@@ -152,7 +152,6 @@ export default {
               "password": this.loginForm.password
             }
           }).then(res => {
-                console.log(res)
                 if (res.data.code===500){
                   this.$message({
                     message: res.data.msg,
@@ -165,7 +164,6 @@ export default {
                 }
               },
               error => {
-                console.log(error)
                 this.$message({
                   message: error.response.data.msg,
                   type: 'error'
@@ -200,7 +198,6 @@ export default {
                   message: "注册失败，请稍后再试",
                   type: 'error'
                 });
-                console.log(error.message)
               }
           )
         } else {
@@ -247,7 +244,7 @@ export default {
               },
               error => {
                 this.loading = false;
-                console.log(error.message)
+                this.btn = "发送";
               }
           );
         } else {

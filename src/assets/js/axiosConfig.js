@@ -29,7 +29,7 @@ request.interceptors.response.use(res => {
         if (res.data.code === 401) {
             if (!isRelogin.show){
                 isRelogin.show = true;
-                MessageBox.confirm('登录状态已过期，请重新登录', '系统提示', {
+                MessageBox.confirm('登陆失效，请重新登录', '系统提示', {
                         confirmButtonText: '重新登录',
                         showCancelButton: false,
                         type: 'warning'
@@ -53,7 +53,7 @@ request.interceptors.response.use(res => {
         if (message.includes("401")){
             if (!isRelogin.show){
                 isRelogin.show = true;
-                MessageBox.confirm('登录状态已过期，请重新登录', '系统提示', {
+                MessageBox.confirm('登陆失效，请重新登录', '系统提示', {
                         confirmButtonText: '确定',
                         showCancelButton: false,
                         type: 'warning'

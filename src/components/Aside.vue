@@ -11,10 +11,10 @@
                                  style="margin-left: 5px;width: 45px;height: 45px;border-radius: 50%;"></el-image>
                       </div>
                     </el-image>
-                      <div class="header-text" style="float: right;margin-left: 20px;margin-top: 0;line-height: 25px">
-                        <span>{{ user.nickname }}</span>
-                        <br/>
-                        <span>{{ user.email }}</span>
+                      <div class="header-text">
+                        <span>{{user.nickname}}</span>
+                        <br>
+                        <span>{{user.email}}</span>
                       </div>
                   </span>
             <el-dropdown-menu slot="dropdown">
@@ -38,6 +38,7 @@
                 <el-button
                     style="padding-right: 0;padding-left: 0"
                     type="text"
+                    @click="()=>this.$router.push('/note/setting/info')"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="15"
                        height="15" viewBox="0 0 24 24" stroke-width="1.6" stroke="#000000" fill="none"
@@ -133,8 +134,8 @@
             </div>
             <div style="margin-bottom: 25px;">
               <span>账号</span>
-              <div style="float: right;margin-right: 65%">
-                <span>{{ user.email }}</span>
+              <div class="account" style="float: right;margin-right: 43%">
+                <el-input :value="user.email"></el-input>
               </div>
             </div>
             <el-form label-position="left" label-width="80px" :model="userInfo">
@@ -723,7 +724,15 @@ html, body {
     height: 50px;
     border-radius: 50%;
   }
-
+  .account{
+    ::v-deep .el-input__inner {
+      border: 0 solid #f9fafb;
+      padding-left: 0;
+      height: 21px;
+      @include font_color("aside_text-color");
+      @include background_color("background_color");
+    }
+  }
   float: left;
   margin-top: 20px;
   margin-left: 20px
@@ -869,6 +878,16 @@ svg {
 }
 
 .header-text {
+  position: absolute;
+  left: 63px;
+  top: 2px;
+  font-size: 16px;
+  line-height: 23px;
+  max-width: 130px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   @include font_color("aside_text-color");
 }
 

@@ -45,13 +45,26 @@ export default {
       this.$refs.ruleForm.validate(v => {
         if (v) {
           this.$axios({
-            url: "/changePassword",
-            data: this.password.newPassword,
-          }).then(res => {
-            this.$message({
-              message: res.data.msg,
-              type: 'success'
-            });
+            url: `/users/resetPassword/`,
+            method: 'post',
+            data:this.password
+          }).then(res =>{
+            if (res.data.code===200){
+              this.$message({
+                message: res.data.msg,
+                type: "success",
+                duration: 5 * 1000
+              })
+              localStorage.removeItem("token")
+              localStorage.removeItem("uid")
+              this.$router.push("/")
+            }else {
+              this.$message({
+                message: res.data.msg,
+                type: "error",
+                duration: 5 * 1000
+              })
+            }
           })
         } else {
           this.$message({
