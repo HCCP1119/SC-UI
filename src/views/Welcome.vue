@@ -3,7 +3,7 @@
     <el-container>
       <el-header>
         <div class="header">
-          <div>
+          <div class="back">
             <el-image :src="require('@/assets/logo.png')"></el-image>
             <div class="text">
               <span>SC-Note</span>
