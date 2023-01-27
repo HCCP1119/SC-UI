@@ -3,7 +3,7 @@
     <el-container>
       <el-header>
         <div class="header">
-          <div class="back" @click="()=>$router.push('/')">
+          <div>
             <el-image :src="require('@/assets/logo.png')"></el-image>
             <div class="text">
               <span>SC-Note</span>
