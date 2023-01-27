@@ -121,11 +121,11 @@ export default {
   background-image: url("../assets/images/home.png");
   background-size:  cover;
   .main{
-    height: 538px;
+    height: 464px;
   }
   .text{
     text-align: center;
-    margin-top: 5%;
+    margin-top: 10%;
   }
   .text p {
     color: grey;
