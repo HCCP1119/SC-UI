@@ -12,6 +12,7 @@ import Setting from "@/components/Setting";
 import AccountInfo from "@/components/AccountInfo";
 import ResetPassword from "@/components/ResetPassword";
 import AccountSecurity from "@/components/AccountSecurity";
+import Findpassword from "@/views/Findpassword";
 
 
 Vue.use(VueRouter)
@@ -25,6 +26,11 @@ const routes = [
         path: '/',
         name: 'Welcome',
         component: Welcome
+    },
+    {
+        path: '/register/Findpassword',
+        name: 'Findpassword',
+        component: Findpassword
     },
     {
         path: '/note',

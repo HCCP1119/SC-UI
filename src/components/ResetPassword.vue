@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="info">
     <el-form :model="password" status-icon :rules="formRules" ref="ruleForm"
              label-width="100px" class="demo-ruleForm"
              label-position="top">
@@ -78,6 +78,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "src/assets/scss/common/common";
 
+.info{
+::v-deep .el-input__inner {
+  @include font_color("aside_text-color");
+  @include background_color("background_color");
+}
+}
 </style>

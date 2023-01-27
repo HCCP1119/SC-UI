@@ -6,14 +6,14 @@
           <div>
             <el-col :span="1">
               <div style="width: 40px;height: 40px;background-color: #e7f5ff;border-radius: 5px">
-                <el-image :src="require('@/assets/images/notebook.png')"
+                <el-image :src="require('@/assets/images/' + col.device +'.png')"
                           style="width: 20px;height: 20px;padding-left: 10px;padding-top: 10px;"></el-image>
               </div>
             </el-col>
             <el-col :span="20" style="margin-top: -3px">
               <div style="font-size: 20px" :style="{'text-decoration':col.status?'none':'line-through'}">{{ col.token }}</div>
               <div>
-                <span style="font-size: 10px;padding-right: 15px">{{ col.device}}/{{col.browser}}</span>
+                <span style="font-size: 10px;padding-right: 15px">{{ col.system}}/{{col.browser}}</span>
                 <span style="font-size: 10px;padding-right: 15px">登录时间：{{ col.loginTime}} | {{col.address}}</span>
                 <span style="font-size: 10px" v-if="col.updateTime!==null">登录ip：{{ col.ip }}</span>
               </div>

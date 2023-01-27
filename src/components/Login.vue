@@ -23,8 +23,8 @@
         </el-form-item>
         <el-form-item style="display: flex;justify-content: space-between;">
           <el-link type="primary" style="margin-right: 50px" :underline="false" @click="reg">快速注册</el-link>
-          <el-link type="primary" :underline="false">找回密码</el-link>
-          <el-link type="primary" style="margin-left: 50px" :underline="false">主要链接</el-link>
+          <el-link type="primary" :underline="false" @click="()=>$router.push('/register/Findpassword')">找回密码</el-link>
+          <el-link type="primary" style="margin-left: 50px" :underline="false">遇到问题</el-link>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -67,8 +67,8 @@
         </el-form-item>
         <el-form-item style="display: flex;justify-content: space-between;">
           <el-link type="primary" style="margin-right: 50px" :underline="false" @click="reg">登录</el-link>
-          <el-link type="primary" :underline="false">找回密码</el-link>
-          <el-link type="primary" style="margin-left: 50px" :underline="false">主要链接</el-link>
+          <el-link type="primary" :underline="false" @click="()=>$router.push('/register/Findpassword')">找回密码</el-link>
+          <el-link type="primary" style="margin-left: 50px" :underline="false">遇到问题</el-link>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -84,6 +84,7 @@ export default {
     return {
       loginDia: false,
       registerDia: false,
+      foundPasswordDia: false,
       loading: false,
       btn: "发送",
       loginForm: {
@@ -138,7 +139,6 @@ export default {
       }
     }
   },
-  watch: {},
   methods: {
     login() {
       this.$refs.loginForm.validate(v => {
@@ -226,8 +226,7 @@ export default {
         if (e.length === 0) {
           this.btn = "";
           this.loading = true;
-          this.$axios.post("/register/" + this.regForm.email).then(
-              res => {
+          this.$axios.post("/register/" + this.regForm.email).then(res => {
                 this.loading = false;
                 if (res.data.code === 200) {
                   this.$message({

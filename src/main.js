@@ -16,6 +16,7 @@ import {
     Loading, Table, TableColumn,
     Divider, Upload, RadioGroup,
     RadioButton, DatePicker,Empty,
+    Step,Steps,Result,
 } from "element-ui";
 import store from './store'
 // import axios from "axios";
@@ -30,6 +31,7 @@ Vue.use(Header)
 Vue.use(Main)
 Vue.use(Aside)
 Vue.use(Row)
+Vue.use(Step)
 Vue.use(Empty)
 Vue.use(Col)
 Vue.use(Menu)
@@ -58,10 +60,12 @@ Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Footer)
 Vue.use(Divider)
+Vue.use(Result)
 Vue.use(Upload)
 Vue.use(RadioGroup)
 Vue.use(RadioButton)
 Vue.use(DatePicker)
+Vue.use(Steps)
 Vue.use(Loading)
 Vue.prototype.$axios = request
 Vue.prototype.$message = Message

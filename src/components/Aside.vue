@@ -22,40 +22,6 @@
                 <el-button
                     style="padding-right: 0;padding-left: 0"
                     type="text"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="15"
-                       height="15" viewBox="0 0 24 24" stroke-width="1.6" stroke="#000000" fill="none"
-                       stroke-linecap="round" stroke-linejoin="round" style="padding-right: 5px">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                    <polyline points="5 12 3 12 12 3 21 12 19 12"/>
-                    <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/>
-                    <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/>
-                  </svg>
-                  <span>个人主页</span>
-                </el-button>
-              </el-dropdown-item>
-              <el-dropdown-item>
-                <el-button
-                    style="padding-right: 0;padding-left: 0"
-                    type="text"
-                    @click="()=>this.$router.push('/note/setting/info')"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="15"
-                       height="15" viewBox="0 0 24 24" stroke-width="1.6" stroke="#000000" fill="none"
-                       stroke-linecap="round" stroke-linejoin="round" style="padding-right: 5px">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                    <path
-                        d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"/>
-                    <circle cx="12" cy="12" r="3"/>
-                  </svg>
-                  <span>设置</span>
-                </el-button>
-              </el-dropdown-item>
-              <el-divider></el-divider>
-              <el-dropdown-item>
-                <el-button
-                    style="padding-right: 0;padding-left: 0"
-                    type="text"
                     @click="()=> this.dialog = true">
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="15"
                        height="15" viewBox="0 0 24 24" stroke-width="1.6" stroke="#000000" fill="none"
@@ -84,6 +50,24 @@
                     <circle cx="16.5" cy="10.5" r=".5" fill="currentColor"/>
                   </svg>
                   <span>切换主题</span>
+                </el-button>
+              </el-dropdown-item>
+              <el-divider></el-divider>
+              <el-dropdown-item style="width: 150px">
+                <el-button
+                    style="padding-right: 0;padding-left: 0"
+                    type="text"
+                    @click="()=>this.$router.push('/note/setting/info')"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="15"
+                       height="15" viewBox="0 0 24 24" stroke-width="1.6" stroke="#000000" fill="none"
+                       stroke-linecap="round" stroke-linejoin="round" style="padding-right: 5px">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path
+                        d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                  <span>设置</span>
                 </el-button>
               </el-dropdown-item>
               <el-divider></el-divider>

@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading">
+  <div v-loading="loading" class="info">
     <div style="padding-bottom: 25px">
       <label style="font-size: 14px">账号</label>
       <el-input style="margin-top: 5px" readonly :value="user.email"></el-input>
@@ -35,3 +35,14 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+@import "src/assets/scss/common/common";
+
+.info{
+  ::v-deep .el-input__inner {
+    @include font_color("aside_text-color");
+    @include background_color("background_color");
+  }
+}
+</style>

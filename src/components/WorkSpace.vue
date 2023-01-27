@@ -300,7 +300,6 @@ export default {
           "userId":localStorage.getItem("uid")
         }
       }).then(res => {
-        console.log(res)
         this.searchResult = res.data.data
       })
     },
