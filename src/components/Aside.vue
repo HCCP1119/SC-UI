@@ -381,7 +381,7 @@ export default {
     ...mapActions('displayModel', ['changeModel']),
 
     //树形节点点击事件
-    handleNodeClick(data, node) {
+    handleNodeClick(data) {
       if (data.type === 'note') {
         this.$router.push({
           path: `/notes/${data.id}`,
