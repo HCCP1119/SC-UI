@@ -146,18 +146,18 @@ export default {
           this.$axios({
             url: '/login',
             method: 'post',
-            headers: {"isToken":false},
+            headers: {"isToken": false},
             data: {
-              "username":this.loginForm.username,
+              "username": this.loginForm.username,
               "password": this.loginForm.password
             }
           }).then(res => {
-                if (res.data.code===500){
+                if (res.data.code === 500) {
                   this.$message({
                     message: res.data.msg,
                     type: 'error'
                   });
-                }else {
+                } else {
                   localStorage.setItem("token", "Bearer " + res.headers['authorization'])
                   localStorage.setItem("uid", res.data.data)
                   this.$router.push("/note/workspace/list")
@@ -192,14 +192,12 @@ export default {
                   this.loginDia = true;
                 }, 2000)
                 this.loginForm.username = this.regForm.username;
-              },
-              error => {
-                this.$message({
-                  message: "注册失败，请稍后再试",
-                  type: 'error'
-                });
-              }
-          )
+              }).catch(() => {
+            this.$message({
+              message: "注册失败，请稍后再试",
+              type: 'error'
+            });
+          })
         } else {
           this.$message({
             message: '请检查填写的信息',
@@ -227,25 +225,23 @@ export default {
           this.btn = "";
           this.loading = true;
           this.$axios.post("/register/" + this.regForm.email).then(res => {
-                this.loading = false;
-                if (res.data.code === 200) {
-                  this.$message({
-                    message: res.data.msg,
-                    type: 'success'
-                  })
-                } else {
-                  this.$message({
-                    message: res.data.msg,
-                    type: 'error'
-                  })
-                }
-                this.btn = "发送";
-              },
-              error => {
-                this.loading = false;
-                this.btn = "发送";
-              }
-          );
+            this.loading = false;
+            if (res.data.code === 200) {
+              this.$message({
+                message: res.data.msg,
+                type: 'success'
+              })
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: 'error'
+              })
+            }
+            this.btn = "发送";
+          }).catch(() => {
+            this.loading = false;
+            this.btn = "发送";
+          });
         } else {
           this.$message({
             message: e,

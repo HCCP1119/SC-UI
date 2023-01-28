@@ -38,8 +38,6 @@ export default {
   },
   mounted() {
     this.value = this.colorSwitch
-    // const theme = (localStorage.getItem("isLight")) ? 'dark' : 'light'
-    // window.document.documentElement.setAttribute("data-theme", theme);
   }
 }
 </script>

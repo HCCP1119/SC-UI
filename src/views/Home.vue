@@ -54,9 +54,7 @@ export default {
 @import '../assets/scss/common/common.scss';
 
 .el-main, .el-header {
-  //在此使用了背景颜色变量
   @include background_color("background_color");
-  //在此使用了文字颜色变量
   @include font_color("text-color");
   transition: background 1s, color 0.6s;
 }

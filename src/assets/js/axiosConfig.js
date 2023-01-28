@@ -84,6 +84,13 @@ request.interceptors.response.use(res => {
                 duration: 5 * 1000
             })
         }
+        else if (message.includes("503")){
+            Message({
+                message: "服务器繁忙，稍后再试",
+                type: 'warning',
+                duration: 5 * 1000
+            })
+        }
         return Promise.reject(error)
     }
 )

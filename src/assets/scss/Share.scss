@@ -1,0 +1,50 @@
+@import "src/assets/scss/common/common";
+
+.main-data {
+  max-height: 500px;
+  overflow-y: auto;
+
+  .el-row:hover {
+    outline: 0 !important;
+    @include font_color("aside_text-color");
+    border-radius: 0.8em;
+    @include background_color("hover_background_color");
+  }
+
+  .el-row {
+    height: 70px;
+    width: 100%;
+  }
+
+  .el-col {
+    padding-top: 15px;
+    padding-left: 15px;
+  }
+}
+
+.el-icon-more:hover {
+  background-color: white;
+  border-radius: 0.4em;
+}
+
+.el-icon-more {
+  padding: 5px;
+}
+
+.el-dropdown-menu {
+  @include background_color("aside_color");
+  @include font_color("aside_text-color");
+}
+
+.el-dropdown-menu__item:hover {
+  @include font_color("aside_text-color");
+  @include background_color("hover_background_color");
+}
+
+::v-deep .el-input__inner {
+  height: 32px;
+}
+
+::v-deep .el-input__icon {
+  line-height: 32px;
+}

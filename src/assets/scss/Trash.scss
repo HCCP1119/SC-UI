@@ -1,0 +1,71 @@
+@import "src/assets/scss/common/common";
+
+.main-data {
+  max-height: 500px;
+  overflow-y: auto;
+
+  .el-row:hover {
+    outline: 0 !important;
+    @include font_color("aside_text-color");
+    border-radius: 0.8em;
+    @include background_color("hover_background_color");
+  }
+
+  .el-row {
+    height: 70px;
+    width: 100%;
+  }
+
+  .el-col {
+    padding-top: 15px;
+    padding-left: 15px;
+  }
+}
+
+.el-icon-more:hover {
+  background-color: white;
+  border-radius: 0.4em;
+}
+
+.el-icon-more {
+  padding: 5px;
+}
+
+.el-dropdown-menu {
+  @include background_color("aside_color");
+  @include font_color("aside_text-color");
+}
+
+.el-dropdown-menu__item:hover {
+  @include font_color("aside_text-color");
+  @include background_color("hover_background_color");
+}
+
+.el-main{
+  ::v-deep .el-loading-mask{
+    @include background_color("background_color");
+  }
+  ::v-deep .el-dialog{
+    position: absolute;
+    top: 151px;
+    left: 568px;
+    width: 400px !important;
+    height: 130px!important;
+    box-shadow: none;
+    border-radius: 6px;
+
+    ::v-deep .el-button{
+      padding-top: 8px!important;
+      padding-bottom: 8px!important;
+    }
+  }
+
+  ::v-deep .el-dialog__body {
+    padding-top: 0!important;
+  }
+  ::v-deep .el-dialog__footer{
+    height: 32px!important;
+    padding-top: 5px;
+    padding-bottom: 0;
+  }
+}
