@@ -19,7 +19,6 @@ import {
     Step,Steps,Result,
 } from "element-ui";
 import store from './store'
-// import axios from "axios";
 import request from "../src/assets/js/axiosConfig"
 import _ from 'lodash'
 

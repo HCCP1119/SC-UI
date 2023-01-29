@@ -140,5 +140,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/assets/scss/Trash";
+@import "src/assets/styles/Trash";
 </style>

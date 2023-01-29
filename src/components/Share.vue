@@ -137,5 +137,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/assets/scss/Share";
+@import "src/assets/styles/Share";
 </style>

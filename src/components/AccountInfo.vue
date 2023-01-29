@@ -37,7 +37,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/assets/scss/common/common";
+@import "src/assets/styles/common/common";
 
 .info{
   ::v-deep .el-input__inner {

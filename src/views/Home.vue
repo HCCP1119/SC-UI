@@ -51,7 +51,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../assets/scss/common/common.scss';
+@import 'src/assets/styles/common/common.scss';
 
 .el-main, .el-header {
   @include background_color("background_color");

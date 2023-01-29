@@ -335,6 +335,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/assets/scss/workspace";
+@import "src/assets/styles/workspace";
 
 </style>

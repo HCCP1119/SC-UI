@@ -4,7 +4,7 @@
       <el-header>
         <div class="header">
           <div class="back" @click="()=>$router.push('/')">
-            <el-image :src="require('@/assets/logo.png')"></el-image>
+            <el-image :src="require('@/assets/images/logo.png')"></el-image>
             <div class="text">
               <span>首页</span>
             </div>
@@ -188,5 +188,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/assets/scss/FindPassword";
+@import "src/assets/styles/FindPassword";
 </style>

@@ -183,5 +183,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/assets/scss/RichText";
+@import "src/assets/styles/RichText";
 </style>

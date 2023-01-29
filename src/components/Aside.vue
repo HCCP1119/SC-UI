@@ -658,5 +658,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/assets/scss/Aside";
+@import "src/assets/styles/Aside";
 </style>
