@@ -25,6 +25,9 @@
       </el-header>
       <el-main v-loading="loading">
         <div style="margin-top: -20px">
+          <div v-if="empty">
+            <el-empty :image-size="200" description="暂无数据"></el-empty>
+          </div>
           <div class="main-data">
             <el-row v-for="col in rolList" :key="col.id">
               <div @click="detail(col)">
@@ -47,10 +50,23 @@
                    <i class="el-icon-more"></i>
                   </span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>
+                        <el-dropdown-item v-if="col.type==='note'">
+                          <el-button
+                              style="padding-right: 0;padding-left: 0"
+                              type="text"
+                              size="mini"
+                              @click="() => shared(col.id)">
+                            <span style="font-size: 14px">分享</span>
+                          </el-button>
                         </el-dropdown-item>
-                        <el-dropdown-item>
-
+                        <el-dropdown-item v-if="col.type==='note'">
+                          <el-button
+                              style="padding-right: 0;padding-left: 0"
+                              type="text"
+                              size="mini"
+                              @click="() => stared(col.id)">
+                            <span style="font-size: 14px">加星</span>
+                          </el-button>
                         </el-dropdown-item>
                         <el-dropdown-item>
                           <i class="el-icon-delete"></i>
@@ -162,6 +178,7 @@ export default {
   data() {
     return {
       queryDig: false,
+      empty:false,
       query: null,
       loading: true,
       workspaces: [],
@@ -237,6 +254,27 @@ export default {
         this.$bus.$emit("AsideRefresh")
       })
     },
+
+    //笔记加星
+    stared(id){
+      this.$axios({
+        url: `/note/star/stared/${id}`,
+        method: 'post'
+      }).then(() => {
+        this.$bus.$emit("StarNoteRefresh")
+      })
+    },
+
+    //分享
+    shared(id){
+      this.$axios({
+        url: `/note/share/shared/${id}`,
+        method: 'post'
+      }).then(() => {
+        this.$bus.$emit("ShareRefresh")
+      })
+    },
+
     pushNote(id){
       this.$router.push({
         path: `/notes/${id}`,
@@ -319,6 +357,7 @@ export default {
         this.loading = false
         this.workspaces = res.data.data
         this.rolList = this.workspaces
+        this.empty = this.rolList.length === 0;
       })
     },
 

@@ -19,7 +19,7 @@
                     placeholder="请输入密码"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button style="width: 100%" type="primary" @click="login"><strong>登录</strong></el-button>
+          <el-button style="width: 100%" type="primary" @click="login" :loading="loginLoading"><strong>登录</strong></el-button>
         </el-form-item>
         <el-form-item style="display: flex;justify-content: space-between;">
           <el-link type="primary" style="margin-right: 50px" :underline="false" @click="reg">快速注册</el-link>
@@ -85,6 +85,7 @@ export default {
       loginDia: false,
       registerDia: false,
       foundPasswordDia: false,
+      loginLoading:false,
       loading: false,
       btn: "发送",
       loginForm: {
@@ -143,6 +144,7 @@ export default {
     login() {
       this.$refs.loginForm.validate(v => {
         if (v) {
+          this.loginLoading = true
           this.$axios({
             url: '/login',
             method: 'post',
@@ -162,8 +164,10 @@ export default {
                   localStorage.setItem("uid", res.data.data)
                   this.$router.push("/note/workspace/list")
                 }
+                this.loginLoading = false
               },
               error => {
+                this.loginLoading = false
                 this.$message({
                   message: error.response.data.msg,
                   type: 'error'

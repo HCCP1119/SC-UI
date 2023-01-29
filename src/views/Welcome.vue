@@ -27,7 +27,7 @@
             <p>你还在使用纸笔来记录笔记？上次记录的内容保存在哪？<br/>想要记录的时候发现没有可用的工具？ 需要查找的时候发现笔记没有在身边? 不妨来试试云笔记</p>
             <el-button type="primary" icon="el-icon-star-off" @click="start">立即使用</el-button>
             <el-button style="color: darkturquoise;margin-left: 50px;">
-              <img src="src/assets/images/github.png" style="height: 13px;width: 13px;"> GitHub
+              <img src="../assets/images/github.png" style="height: 13px;width: 13px;"> GitHub
             </el-button>
           </div>
           <div>

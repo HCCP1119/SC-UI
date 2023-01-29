@@ -41,6 +41,9 @@
       </el-header>
       <el-main v-loading="loading">
         <div style="margin-left: -30px;margin-top: -35px" class="main-data">
+          <div v-if="empty">
+            <el-empty :image-size="200" description="暂无数据"></el-empty>
+          </div>
           <el-row :gutter="20">
             <el-col :span="4" v-for="(file, index) in files" :key="file.id" :offset="index > 0 ? 0 : 0"
                     style="width: 200px;padding-top: 15px;margin-left: 30px">
@@ -123,6 +126,7 @@ export default {
       headerObj: {'satoken': localStorage.getItem('token')},
       files: [],
       loading: true,
+      empty:false,
       bkFiles: [],
       fileName: '',
       sequence: 'ASC',
@@ -141,6 +145,7 @@ export default {
         this.bkFiles = res.data.data
         this.total = this.bkFiles.length
         this.files = this.bkFiles.slice((this.currentPage - 1) * 10, this.currentPage * 10)
+        this.empty = this.total === 0;
       })
     },
     basis() {
@@ -151,17 +156,20 @@ export default {
         this.bkFiles = res.data.data
         this.total = this.bkFiles.length
         this.files = this.bkFiles.slice((this.currentPage - 1) * 10, this.currentPage * 10)
+        this.empty = this.total === 0;
       })
     },
     fileName(val) {
       const list = this.filesFilter(val)
       this.total = list.length
       this.files = list.slice((this.currentPage - 1) * 10, this.currentPage * 10)
+      this.empty = this.total === 0;
     },
   },
   methods: {
     uploadSuccess(response) {
       this.files = response.data
+      this.empty = this.files.length === 0;
     },
     handleCurrentChange(val) {
       this.currentPage = val
@@ -211,6 +219,7 @@ export default {
         this.total = this.bkFiles.length
         this.files = this.bkFiles.slice((this.currentPage - 1) * 10, this.currentPage * 10)
         this.visible = false
+        this.empty = this.total === 0;
       })
     }
   },
@@ -223,6 +232,7 @@ export default {
       this.bkFiles = res.data.data
       this.total = this.bkFiles.length
       this.files = this.bkFiles.slice((this.currentPage - 1) * 10, this.currentPage * 10)
+      this.empty = this.total === 0;
     })
   }
 }

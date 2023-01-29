@@ -9,6 +9,9 @@
       </el-header>
       <el-main v-loading="loading">
         <div style="margin-top: -20px">
+          <div v-if="empty">
+            <el-empty :image-size="200" description="暂无数据"></el-empty>
+          </div>
           <div class="main-data">
             <el-row v-for="col in removeList" :key="col.id">
               <div>
@@ -95,6 +98,7 @@ export default {
   data() {
     return {
       visible:false,
+      empty:false,
       removeList: [],
       loading:true,
     }
@@ -125,6 +129,7 @@ export default {
       }).then(res => {
         this.loading = false
         this.removeList = res.data.data
+        this.empty = this.removeList.length === 0;
       })
     }
   },

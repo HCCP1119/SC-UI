@@ -249,7 +249,7 @@
                           <span style="font-size: 14px">删除</span>
                         </el-button>
                       </el-dropdown-item>
-                      <el-dropdown-item>
+                      <el-dropdown-item v-if="node.data.type==='note'">
                         <el-button
                             style="padding-right: 0;padding-left: 0"
                             type="text"

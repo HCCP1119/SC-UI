@@ -13,6 +13,7 @@ import AccountInfo from "@/components/AccountInfo";
 import ResetPassword from "@/components/ResetPassword";
 import AccountSecurity from "@/components/AccountSecurity";
 import Findpassword from "@/views/Findpassword";
+import ShareView from "@/views/ShareView";
 
 
 Vue.use(VueRouter)
@@ -31,6 +32,11 @@ const routes = [
         path: '/register/Findpassword',
         name: 'Findpassword',
         component: Findpassword
+    },
+    {
+        path: `/scnotesShare/:id`,
+        name: 'ShareView',
+        component: ShareView
     },
     {
         path: '/note',
@@ -95,6 +101,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
+    base: '/',
     mode: 'history',
     routes
 })

@@ -15,6 +15,9 @@
       </el-header>
       <el-main v-loading="loading">
         <div style="margin-top: -20px">
+          <div v-if="empty">
+            <el-empty :image-size="200" description="暂无数据"></el-empty>
+          </div>
           <div class="main-data">
             <el-row v-for="col in starList" :key="col.id">
               <div @click="detail(col)">
@@ -77,6 +80,7 @@ export default {
   data() {
     return {
       noteName: "",
+      empty:false,
       starList: [],
       bkList: [],
       loading: true,
@@ -99,6 +103,7 @@ export default {
         this.loading = false
         this.bkList = res.data.data
         this.starList = res.data.data
+        this.empty = this.starList.length === 0;
       })
     },
 

@@ -15,9 +15,12 @@
     </el-header>
     <el-main v-loading="loading">
       <div style="margin-top: -20px">
+        <div v-if="empty">
+          <el-empty :image-size="200" description="暂无数据"></el-empty>
+        </div>
         <div class="main-data">
           <el-row v-for="col in shareList" :key="col.id">
-            <div @click="detail(col)">
+            <div>
               <el-col :span="1">
                 <div style="width: 40px;height: 40px;background-color: #e7f5ff;border-radius: 5px">
                   <el-image :src="require('@/assets/images/' + col.icon + '.png')"
@@ -38,6 +41,16 @@
                    <i class="el-icon-more"></i>
                   </span>
                     <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item>
+                        <i class="el-icon-link" style="color: #409EFF;"></i>
+                        <el-button
+                            style="padding-right: 0;padding-left: 0;"
+                            type="text"
+                            size="mini"
+                            @click="() => copyAddr(col.id)">
+                          <span style="font-size: 14px">复制地址</span>
+                        </el-button>
+                      </el-dropdown-item>
                       <el-dropdown-item>
                         <i class="el-icon-star-off" style="color: #409EFF;"></i>
                         <el-button
@@ -77,6 +90,7 @@ export default {
   data() {
     return {
       fileName: "",
+      empty: false,
       shareList: [],
       bkList: [],
       loading: true,
@@ -96,6 +110,7 @@ export default {
         this.loading = false
         this.bkList = res.data.data
         this.shareList = res.data.data
+        this.empty = this.shareList.length === 0;
       })
     },
     unShare(id){
@@ -114,6 +129,17 @@ export default {
         this.getData()
         this.$bus.$emit("AsideRefresh")
       })
+    },
+    copyAddr(id){
+      const addr = "localhost/scnotesShare/" + id;
+      const input = document.createElement("input"); // 创建input对象
+      input.value = addr; // 设置复制内容
+      document.body.appendChild(input); // 添加临时实例
+      input.select(); // 选择实例内容
+      document.execCommand("Copy"); // 执行复制
+      document.body.removeChild(input); // 删除临时实例
+      this.$message.success('复制成功！');
+
     },
     filesFilter(val) {
       if (val === "") {
