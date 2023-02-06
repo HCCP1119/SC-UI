@@ -185,8 +185,8 @@ export default {
     register() {
       this.$refs.ruleForm.validate(v => {
         if (v) {
-          this.$axios.post("/register", this.regForm).then(
-              res => {
+          this.$axios.post("/register", this.regForm).then(res => {
+              if (res.data.code===200){
                 this.$message({
                   message: res.data.msg,
                   type: 'success'
@@ -196,6 +196,12 @@ export default {
                   this.loginDia = true;
                 }, 2000)
                 this.loginForm.username = this.regForm.username;
+              }else {
+                this.$message({
+                  message: res.data.msg,
+                  type: 'error'
+                });
+              }
               }).catch(() => {
             this.$message({
               message: "注册失败，请稍后再试",
