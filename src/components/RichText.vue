@@ -64,7 +64,7 @@ export default {
         autoFocus: false,
         MENU_CONF: {
           uploadImage: {
-            server: 'http://localhost:9200/file/noteImage',
+            server: 'http://192.168.1.129:9200/file/noteImage',
             headers: {
               'satoken': localStorage.getItem("token")
             },

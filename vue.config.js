@@ -5,6 +5,7 @@ function resolve(dir) {
 }
 
 module.exports = {
+    publicPath: './',
     parallel: false,
     outputDir: 'dist',
     assetsDir: 'static',
@@ -23,8 +24,8 @@ module.exports = {
             }
         },
         performance:{
-            maxEntrypointSize: 10000000,
-            maxAssetSize: 30000000
+            maxEntrypointSize: 5000000000,
+            maxAssetSize: 30000000000
         }
     },
     devServer: {

@@ -6,7 +6,7 @@ import router from "@/router";
 export let isRelogin = { show: false };
 
 const request = axios.create({
-    baseURL: "http://localhost:9200/"
+    baseURL: "http://192.168.1.129:9200/"
 });
 
 request.all = axios.all

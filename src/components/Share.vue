@@ -131,7 +131,7 @@ export default {
       })
     },
     copyAddr(id){
-      const addr = "localhost/scnotesShare/" + id;
+      const addr = "http://192.168.1.129/#/scnotesShare/" + id;
       const input = document.createElement("input"); // 创建input对象
       input.value = addr; // 设置复制内容
       document.body.appendChild(input); // 添加临时实例

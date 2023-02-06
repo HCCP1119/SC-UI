@@ -25,7 +25,7 @@
           <div style="float: left">
             <el-upload
                 class="upload-demo"
-                action="http://localhost:9200/file/uploadFile"
+                action="http://192.168.1.129:9200/file/uploadFile"
                 :headers="headerObj"
                 name="file"
                 :on-success="uploadSuccess"

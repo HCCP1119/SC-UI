@@ -102,7 +102,7 @@ const routes = [
 
 const router = new VueRouter({
     base: '/',
-    mode: 'history',
+    mode: 'hash',
     routes
 })
 

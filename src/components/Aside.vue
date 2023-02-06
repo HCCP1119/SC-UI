@@ -105,7 +105,7 @@
               </el-image>
               <el-upload
                   class="upload"
-                  action="http://localhost:9200/file/headImage"
+                  action="http://192.168.1.129:9200/file/headImage"
                   name="img"
                   :headers="headerObj"
                   accept=".jpg,.jpeg,.png"
