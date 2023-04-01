@@ -7,6 +7,7 @@ export let isRelogin = { show: false };
 
 const request = axios.create({
     baseURL: "http://192.168.1.129:9200/"
+    // baseURL: "http://localhost:9200/"
 });
 
 request.all = axios.all
@@ -24,7 +25,7 @@ request.interceptors.request.use((config) => {
         return Promise.reject(error)
     }
 )
-//添加响应拦截器，判断是否有令牌刷新
+//添加响应拦截器
 request.interceptors.response.use(res => {
         if (res.data.code === 401) {
             if (!isRelogin.show){

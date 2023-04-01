@@ -7,7 +7,8 @@
           @blur="saveTitle"
       >
       </el-input>
-      <el-button style="position: fixed;right: 110px;margin-top: 2px" @click="save" size="medium" :loading="saveLoading">保存</el-button>
+      <el-button style="position: fixed;right: 190px;margin-top: 2px" @click="save" size="medium" :loading="saveLoading">保存</el-button>
+      <el-button style="position: fixed;right: 110px;margin-top: 2px" type="success" @click="fileExport" size="medium">导出</el-button>
       <el-button style="position: fixed;right: 30px;margin-top: 2px" type="primary" size="medium">分享</el-button>
     </div>
     <Toolbar
@@ -150,6 +151,22 @@ export default {
         this.removeImgList = []
         this.saveLoading = false
       }))
+    },
+    fileExport(){
+      this.$axios({
+        url: `/note/2md/${this.noteId}`,
+        method: 'post',
+        responseType: 'arraybuffer'
+      }).then(res => {
+        const blob = new Blob([res.data], { type: 'text/markdown' })
+        const url = window.URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = this.title + '.md'
+        link.click()
+      }).catch(error =>{
+        console.log(error)
+      })
     }
   },
   created() {
