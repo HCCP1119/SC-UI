@@ -508,6 +508,7 @@ export default {
             "icon": node.data.icon,
             "isEdit": node.data.isEdit,
             "parentId": node.parent.data.id,
+            "uid": this.user.id
           }
         } else if (!node.data.rename) {
           src = '/note/addWorkspace'
@@ -519,6 +520,7 @@ export default {
             "icon": node.data.icon,
             "isEdit": node.data.isEdit,
             "parentId": node.parent.data.id,
+            "uid": this.user.id
           }
         } else if (node.data.rename) {
           src = "/note/rename"
@@ -565,6 +567,10 @@ export default {
         method: 'post'
       }).then(() => {
         this.$bus.$emit("ShareRefresh")
+        this.$message({
+          message: '分享成功',
+          type: 'success'
+        })
       })
     },
 

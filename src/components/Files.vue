@@ -67,36 +67,36 @@
                     </div>
                     <div>
                       <el-button type="text" @click="downloadFile(file.disk)">下载</el-button>
-                      <el-button slot="reference" type="text" style="color: #F56C6C;padding-left: 10px" @click="visible = true">删除
+                      <el-button slot="reference" type="text" style="color: #F56C6C;padding-left: 10px" @click="redayDel=file.disk;visible = true">删除
                       </el-button>
                     </div>
-                    <el-dialog
-                        :visible.sync="visible"
-                        width="30%"
-                        :close-on-click-modal="false"
-                    >
-                      <span style="margin-left: 25px;">文件删除后将不能恢复</span>
-                      <template slot="title">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alert-circle"
-                             width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ff9300" fill="none"
-                             stroke-linecap="round" stroke-linejoin="round">
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                          <circle cx="12" cy="12" r="9"/>
-                          <line x1="12" y1="8" x2="12" y2="12"/>
-                          <line x1="12" y1="16" x2="12.01" y2="16"/>
-                        </svg>
-                        <div style="position: absolute;left: 50px;top: 20px">
-                          <span style="font-weight: 500;color: black">确认删除？</span>
-                        </div>
-                      </template>
-                      <span slot="footer" class="dialog-footer">
-                        <el-button @click="visible = false" size="medium">取消</el-button>
-                        <el-button type="primary" @click="removeFile(file.disk)" size="medium">删除</el-button>
-                      </span>
-                    </el-dialog>
                   </div>
                 </div>
               </el-card>
+              <el-dialog
+                  :visible.sync="visible"
+                  width="30%"
+                  :close-on-click-modal="false"
+              >
+                <span style="margin-left: 25px;">文件删除后将不能恢复</span>
+                <template slot="title">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alert-circle"
+                       width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ff9300" fill="none"
+                       stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <circle cx="12" cy="12" r="9"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <div style="position: absolute;left: 50px;top: 20px">
+                    <span style="font-weight: 500;color: black">确认删除？</span>
+                  </div>
+                </template>
+                <span slot="footer" class="dialog-footer">
+                        <el-button @click="visible = false" size="medium">取消</el-button>
+                        <el-button type="primary" @click="removeFile(redayDel)" size="medium">删除</el-button>
+                      </span>
+              </el-dialog>
             </el-col>
           </el-row>
         </div>
@@ -132,6 +132,7 @@ export default {
       sequence: 'ASC',
       currentPage: 1,
       visible: false,
+      redayDel:'',
       total: 0,
       basis: 'upload_time',
     }

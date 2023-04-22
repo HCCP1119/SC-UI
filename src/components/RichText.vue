@@ -9,7 +9,7 @@
       </el-input>
       <el-button style="position: fixed;right: 190px;margin-top: 2px" @click="save" size="medium" :loading="saveLoading">保存</el-button>
       <el-button style="position: fixed;right: 110px;margin-top: 2px" type="success" @click="fileExport" size="medium">导出</el-button>
-      <el-button style="position: fixed;right: 30px;margin-top: 2px" type="primary" size="medium">分享</el-button>
+      <el-button style="position: fixed;right: 30px;margin-top: 2px" type="primary" size="medium" @click="shared(noteId)">分享</el-button>
     </div>
     <Toolbar
         class="tool"
@@ -167,7 +167,19 @@ export default {
       }).catch(error =>{
         console.log(error)
       })
-    }
+    },
+    shared(id){
+      this.$axios({
+        url: `/note/share/shared/${id}`,
+        method: 'post'
+      }).then(() => {
+        this.$bus.$emit("ShareRefresh")
+        this.$message({
+          message: '分享成功',
+          type: 'success'
+        })
+      })
+    },
   },
   created() {
     const id = this.$route.path.substring((this.$route.path).lastIndexOf("/") + 1)
