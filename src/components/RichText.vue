@@ -94,14 +94,17 @@ export default {
   watch: {
     $route(to) {
       const id = (to.path).substring((to.path).lastIndexOf("/") + 1)
-      this.$axios({
-        url: `/note/getNote/${id}`,
-        method: 'get'
-      }).then(res => {
-        this.title = res.data.data.title
-        this.html = res.data.data.content
-        this.noteId = res.data.data.id
-      })
+      const reg = RegExp(/null/);
+      if (!reg.test(id)){
+        this.$axios({
+          url: `/note/getNote/${id}`,
+          method: 'get'
+        }).then(res => {
+          this.title = res.data.data.title
+          this.html = res.data.data.content
+          this.noteId = res.data.data.id
+        })
+      }
     },
     html(newVal, oldVal) {
       const reg = /(?<=img src=").*?(?=" alt=)/g
@@ -184,14 +187,17 @@ export default {
   created() {
     const id = this.$route.path.substring((this.$route.path).lastIndexOf("/") + 1)
     this.noteId = id
-    this.$axios({
-      url: `/note/getNote/${id}`,
-      method: 'get'
-    }).then(res => {
-      this.loading = false
-      this.title = res.data.data.title
-      this.html = res.data.data.content
-    })
+    const reg = RegExp(/null/);
+    if (!reg.test(id)){
+      this.$axios({
+        url: `/note/getNote/${id}`,
+        method: 'get'
+      }).then(res => {
+        this.loading = false
+        this.title = res.data.data.title
+        this.html = res.data.data.content
+      })
+    }
   },
   mounted() {
     this.$bus.$on("resetTitle", (title) => {

@@ -383,15 +383,21 @@ export default {
     //树形节点点击事件
     handleNodeClick(data) {
       if (data.type === 'note') {
-        this.$router.push({
-          path: `/notes/${data.id}`,
-        })
+        const reg = RegExp(/null/);
+        if (!reg.test(data.id)){
+          this.$router.push({
+            path: `/notes/${data.id}`,
+          })
+        }
       }
     },
 
     //菜单点击事件
     menuItemClick(index) {
-      this.$router.push(index);
+      const reg = RegExp(/null/);
+      if (!reg.test(index.fullPath)){
+        this.$router.push(index);
+      }
     },
 
     //添加子节点
@@ -541,9 +547,10 @@ export default {
           }
           node.data.rename = false
           this.$bus.$emit("WorkspaceRefresh")
-          if (node.data.type==='note'){
+          const reg = RegExp(/null/);
+          if (node.data.type==='note' && !reg.test(node.data.id)){
             this.$router.push({
-              path: `/notes/${node.data.id}`,
+              path: `/notes/${res.data.data}`,
             })
           }
         })
