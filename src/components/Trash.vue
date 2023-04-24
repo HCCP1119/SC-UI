@@ -51,7 +51,7 @@
                               style="padding-right: 0;padding-left: 0;color: #F56C6C"
                               type="text"
                               size="mini"
-                              @click="visible=true">
+                              @click="redayDelId=col.id;visible=true">
                             <span style="font-size: 14px">删除</span>
                           </el-button>
                         </el-dropdown-item>
@@ -78,7 +78,7 @@
                       </template>
                       <span slot="footer" class="dialog-footer">
                         <el-button @click="visible = false" size="medium">取消</el-button>
-                        <el-button type="danger" @click="remove(col.id)" size="medium">永久删除</el-button>
+                        <el-button type="danger" @click="remove(redayDelId)" size="medium">永久删除</el-button>
                          </span>
                     </el-dialog>
                   </div>
@@ -101,6 +101,7 @@ export default {
       empty:false,
       removeList: [],
       loading:true,
+      redayDelId:'',
     }
   },
   methods: {
@@ -119,6 +120,7 @@ export default {
         method: 'delete'
       }).then(() => {
         this.getData()
+        this.visible = false
         this.$bus.$emit("AsideRefresh")
       })
     },
